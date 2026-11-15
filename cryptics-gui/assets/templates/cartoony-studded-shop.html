@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- Skill Made By : Crypticplay_RBLX - Only on Youtube -->
+<meta name="author" content="Crypticplay_RBLX">
+<title>Shop v4 – Cartoony Studded</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lip: 7px;            /* rule 11: 3D bottom is ALWAYS black */
+    --stud: url(assets/tex/stud_kek.webp);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #20242c; font-family: 'Fredoka One', system-ui, sans-serif; color: #fff; }
+  .page { display: flex; gap: 40px; padding: 40px; align-items: flex-start; width: max-content; }
+
+  /* ---------- artboard ---------- */
+  .artboard { position: relative; width: 1280px; height: 800px; overflow: hidden; border-radius: 6px;
+    background: linear-gradient(180deg, #9fe6ff, #5fb8ff); }
+  .artboard::before { content: ''; position: absolute; inset: 0; background: var(--stud) repeat; background-size: 260px auto;
+    mix-blend-mode: overlay; opacity: .55; }
+
+  /* ---------- studded 3D surface (lip black, outline black, studs from ui-resources, glass glare) ---------- */
+  .s3d { position: absolute; border: 4px solid #000; border-radius: 26px;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    box-shadow: 0 var(--lip) 0 #000, inset 0 0 0 4px rgba(255,255,255,.45); }
+  .s3d::before { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: var(--stud) repeat; background-size: 220px auto; mix-blend-mode: overlay; opacity: .8; }
+  .s3d::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: linear-gradient(118deg, rgba(255,255,255,.26) 0 28%, transparent 28% 33%, rgba(255,255,255,.3) 33% 36%, transparent 36%); }
+  .s3d.noglare::after { display: none; }
+  /* decorations (sunburst, halftone, rays) live in a clipped layer so they can never spill out of their card */
+  .s3d > .decor { position: absolute; inset: 0; border-radius: 22px; overflow: hidden; z-index: 0; pointer-events: none; }
+  .s3d > * { position: relative; z-index: 1; }
+
+  /* ---------- text ---------- */
+  .t { paint-order: stroke fill; -webkit-text-stroke: 6px #000; text-shadow: 0 3px 0 rgba(0,0,0,.55); letter-spacing: .5px; }
+  /* gradient text: wrapper draws the black outline behind, inner span carries the gradient */
+  .gt { position: relative; display: inline-block; white-space: nowrap; }
+  .gt::before { content: attr(data-t); position: absolute; left: 0; top: 0; color: #000;
+    -webkit-text-stroke: 10px #000; text-shadow: 0 5px 0 #000; }
+  .gt > span { position: relative; color: transparent; -webkit-text-stroke: 0;
+    background: linear-gradient(180deg, var(--g1), var(--g2)); -webkit-background-clip: text; background-clip: text; }
+
+  /* ---------- buttons (rule 14: ≥16px inner padding, content never touches edges) ---------- */
+  .btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 0 18px; height: 60px; border: 4px solid #000; border-radius: 18px;
+    background: linear-gradient(180deg, var(--c1), var(--c2));
+    box-shadow: 0 6px 0 #000, inset 0 0 0 4px rgba(255,255,255,.5); font-size: 24px; white-space: nowrap; }
+  .btn::before { content: ''; position: absolute; left: 10px; right: 10px; top: 6px; height: 34%; border-radius: 12px;
+    background: rgba(255,255,255,.42); pointer-events: none; }
+  .btn::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: var(--stud) repeat; background-size: 200px auto; mix-blend-mode: overlay; opacity: .5; }
+  .btn > * { position: relative; z-index: 1; }
+  .btn img { width: 34px; height: 34px; object-fit: contain; }
+  .green  { --c1: #a6f7b3; --c2: #2fcf4f; }
+  .gold   { --c1: #fff0b8; --c2: #ffbf2e; }
+  .navy   { --c1: #8cc0f5; --c2: #2e6cc4; }
+  .red    { --c1: #ffb0b0; --c2: #f03c3c; }
+  .gray   { --c1: #eef1f4; --c2: #a3abb4; }
+
+  /* ---------- currency pill (rule 14: + has 12px from the end) ---------- */
+  .pill { position: absolute; display: flex; align-items: center; height: 50px; padding: 0 12px 0 60px; gap: 12px;
+    border: 4px solid #000; border-radius: 26px; background: linear-gradient(180deg, #fff, #e3efff); box-shadow: 0 6px 0 #000; }
+  .pill .ico { position: absolute; left: -14px; top: 50%; transform: translateY(-50%); width: 64px; height: 64px; object-fit: contain;
+    filter: drop-shadow(0 3px 0 rgba(0,0,0,.35)); }
+  .pill .amt { font-size: 26px; min-width: 96px; }
+  .pill .plus { width: 30px; height: 30px; object-fit: contain; flex: none; }
+
+  /* ---------- window ---------- */
+  .win { position: absolute; left: 80px; top: 96px; width: 1120px; height: 680px; }
+  .header { left: 0; top: 0; width: 1120px; height: 104px; --c1: #fff27a; --c2: #ffae1f; z-index: 3; }
+  .body   { left: 0; top: 123px; width: 1120px; height: 557px; --c1: #8fcbff; --c2: #3e8fe6; z-index: 1; border-radius: 30px; }
+  .cart { position: absolute; left: -38px; top: -60px; width: 150px; transform: rotate(10deg); z-index: 4;
+    filter: drop-shadow(0 6px 0 rgba(0,0,0,.35)); }
+  .title { position: absolute; left: 132px; top: 8px; font-size: 64px; --g1: #ffffff; --g2: #fff0a8; z-index: 4; }
+  .close { position: absolute; right: 20px; top: 14px; width: 72px; height: 72px; padding: 0; font-size: 40px; z-index: 4; }
+
+  /* rail */
+  .rail { position: absolute; left: 24px; top: 147px; width: 196px; display: flex; flex-direction: column; gap: 12px; z-index: 2; }
+  .rail .btn { height: 56px; }
+  .rail .btn { justify-content: flex-start; }
+  .rail .sel { box-shadow: 0 6px 0 #000, inset 0 0 0 4px rgba(255,255,255,.6), 0 0 26px 6px rgba(255,224,102,.95); }
+  .free { left: 24px; top: 507px; width: 196px; height: 142px; --c1: #c9ffc0; --c2: #2fcf4f; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .free img.gift { width: 70px; height: 70px; object-fit: contain; }
+  .free .lbl { font-size: 22px; }
+  .free .rays { position: absolute; width: 190px; left: 0; top: -26px; opacity: .35; animation: spin 16s linear infinite; }
+  .badge-n { position: absolute; right: -10px; top: -12px; width: 34px; height: 34px; border-radius: 50%; border: 4px solid #000;
+    background: linear-gradient(180deg,#ff8a8a,#e81e1e); display: grid; place-items: center; font-size: 18px; z-index: 3;
+    animation: ring 1.6s ease-in-out infinite; transform-origin: 50% 10%; }
+
+  /* content (rule 12: 16px inner padding so outlines + black lips never get cut; scrollbar outside) */
+  .scroll { position: absolute; left: 236px; top: 139px; width: 836px; height: 529px; overflow: hidden; padding: 16px; z-index: 2;
+  }
+  .stack { position: relative; display: flex; flex-direction: column; gap: 24px; }
+  .row { position: relative; display: flex; gap: 24px; }
+
+  /* starter pack */
+  .starter { position: relative !important; height: 222px; border-radius: 28px;
+    background: linear-gradient(100deg, #ff5f8f, #ffb347 20%, #fff06a 38%, #7cf28a 55%, #5ec8ff 72%, #a78bff 86%, #ff7ad9) !important; }
+  .starter .sun { position: absolute; left: 60px; top: -80px; width: 360px; opacity: .35; animation: spin 18s linear infinite; }
+  .starter .ht { position: absolute; right: 250px; bottom: -40px; width: 160px; opacity: .35; }
+  .starter .left { position: absolute; left: 24px; top: 12px; }
+  .starter h2 { margin: 0; font-size: 42px; font-weight: 400; }
+  .starter .sub { font-size: 20px; paint-order: stroke fill; -webkit-text-stroke: 5px #000; text-shadow: 0 2px 0 rgba(0,0,0,.5); margin-top: 2px; }
+  .tiles { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .tile { position: relative; width: 88px; height: 88px; border-radius: 18px; border: 4px solid #000; background: rgba(0,0,0,.28);
+    box-shadow: inset 0 0 0 3px rgba(255,255,255,.85), 0 5px 0 #000; }
+  .tile img { position: absolute; left: 12px; top: 4px; width: 58px; height: 58px; object-fit: contain; }
+  .tile span { position: absolute; right: 7px; bottom: 3px; font-size: 20px; }
+  .plusimg { width: 30px; height: 30px; object-fit: contain; }
+  .starter .right { position: absolute; right: 24px; top: 16px; width: 236px; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  .op { font-size: 46px; --g1: #fff36b; --g2: #ff8a00; transform: rotate(-5deg); }
+  .starter .buy { width: 236px; height: 72px; font-size: 34px; }
+  .starter .buy img { width: 42px; height: 42px; }
+  .spark { position: absolute; width: 42px; z-index: 2; animation: twinkle 1.6s ease-in-out infinite; }
+
+  /* pass cards */
+  .card { position: relative !important; width: 254px; height: 236px; border-radius: 26px; display: flex; flex-direction: column; align-items: center; padding: 12px 18px 20px; }
+  .card h3 { margin: 0; font-size: 30px; font-weight: 400; }
+  .card .icon { width: 96px; height: 96px; object-fit: contain; margin: 6px 0 auto; filter: drop-shadow(0 4px 0 rgba(0,0,0,.3)); }
+  .card .btn { width: 100%; height: 56px; font-size: 26px; }
+  .cyan { --c1: #b9f7ff; --c2: #2fc6e8; } .mag { --c1: #ffb8f4; --c2: #d63bdb; } .peach { --c1: #ffe2b8; --c2: #ff9f4a; }
+  .tag { position: absolute; top: -14px; right: -8px; padding: 2px 10px 4px; border: 3px solid #000; border-radius: 10px; font-size: 15px;
+    background: linear-gradient(180deg,#ff8a8a,#e81e1e); transform: rotate(6deg); box-shadow: 0 3px 0 #000; z-index: 2; }
+  .check { position: absolute; top: 56px; right: 18px; width: 50px; z-index: 2; }
+
+  /* coin packs (scroll peek, faded) */
+  .pack { position: relative !important; width: 254px; height: 118px; border-radius: 24px; --c1: #fff27a; --c2: #ffc21e;
+    display: flex; align-items: center; gap: 14px; padding: 0 18px; }
+  .pack img { width: 66px; height: 66px; object-fit: contain; }
+  .pack span { font-size: 28px; }
+
+  /* scrollbar — in the body, outside the content */
+  .track { position: absolute; left: 1086px; top: 155px; width: 10px; height: 497px; border-radius: 5px; background: rgba(255,255,255,.4); z-index: 2; }
+  .thumb { position: absolute; left: 1086px; top: 155px; width: 10px; height: 230px; border-radius: 5px; background: #fff; z-index: 3; }
+
+  /* effect previews (Roblox: UIEffects.lua) */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes twinkle { 0%,100% { transform: scale(1) rotate(0); opacity: 1 } 50% { transform: scale(.2) rotate(90deg); opacity: .3 } }
+  @keyframes ring { 0%,60%,100% { transform: rotate(0) } 65% { transform: rotate(30deg) } 70% { transform: rotate(-30deg) } 75% { transform: rotate(18deg) } 80% { transform: rotate(-18deg) } 85% { transform: rotate(8deg) } 90% { transform: rotate(-8deg) } }
+  @keyframes sweep { 0% { left: -60% } 60%,100% { left: 130% } }
+  .shine { overflow: hidden; }
+  .shine .sweep { position: absolute; top: -20%; left: -60%; width: 35%; height: 140%; transform: skewX(-20deg); z-index: 2;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent); animation: sweep 2.6s ease-in-out infinite; }
+
+  /* legend beside the screen (rule 13: notes never on top of UI) */
+  .legend { width: 320px; background: #1b1530; border-radius: 16px; padding: 18px 20px; font-family: system-ui, sans-serif; }
+  .legend h4 { margin: 0 0 10px; font: 20px 'Fredoka One', sans-serif; }
+  .legend li { margin: 6px 0; color: #ffb8f2; font-size: 14px; }
+  .legend .ok { color: #9dffb0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="artboard" id="artboard">
+    <div class="win">
+      <!-- BODY -->
+      <div class="s3d body"></div>
+      <div class="track"></div><div class="thumb"></div>
+
+      <!-- HEADER SLAB -->
+      <div class="s3d header"></div>
+      <img class="cart" src="assets/icons/cart.png" alt="">
+      <div class="title gt" data-t="Shop"><span>Shop</span></div>
+      <div class="pill" style="left:560px; top:24px; z-index:4"><img class="ico" src="assets/icons/coin.png" alt=""><span class="amt t" style="color:#ffd04a">12,500</span><img class="plus" src="assets/icons/plus.png" alt=""></div>
+      <div class="pill" style="left:808px; top:24px; z-index:4"><img class="ico" src="assets/icons/blue_gem.png" alt=""><span class="amt t" style="color:#7fdcff;min-width:60px">250</span><img class="plus" src="assets/icons/plus.png" alt=""></div>
+      <div class="btn red close t">X</div>
+
+      <!-- LEFT RAIL -->
+      <div class="rail">
+        <div class="btn gold sel t"><img src="assets/icons/star.png" alt="">Featured</div>
+        <div class="btn navy t"><img src="assets/icons/upgrade.png" alt="">Shovels</div>
+        <div class="btn navy t"><img src="assets/icons/fuse.png" alt="">Potions</div>
+        <div class="btn navy t"><img src="assets/icons/bolt.png" alt="">Pads</div>
+        <div class="btn green t"><img src="assets/icons/robux.png" alt="">Robux</div>
+      </div>
+      <div class="s3d free noglare">
+        <div class="decor"><img class="rays" src="assets/fx/sunburst_quelly6.png" alt=""></div>
+        <img class="gift" src="assets/icons/gift.png" alt="">
+        <div class="lbl t">FREE DAILY</div>
+        <div class="badge-n t">1</div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="scroll">
+        <div class="stack">
+          <div class="s3d starter">
+            <div class="decor"><img class="sun" src="assets/fx/sunburst_quelly6.png" alt=""><img class="ht" src="assets/fx/halftone_quelly1.png" alt=""></div>
+            <div class="left">
+              <h2 class="t">Starter Pack</h2>
+              <div class="sub">A boost for your first jumps!</div>
+              <div class="tiles">
+                <div class="tile"><img src="assets/icons/cash.png" alt=""><span class="t">+5K</span></div>
+                <img class="plusimg" src="assets/icons/plus.png" alt="">
+                <div class="tile"><img src="assets/icons/blue_gem.png" alt=""><span class="t">+50</span></div>
+                <img class="plusimg" src="assets/icons/plus.png" alt="">
+                <div class="tile"><img src="assets/icons/fuse.png" alt=""><span class="t">x1</span></div>
+              </div>
+            </div>
+            <div class="right">
+              <div class="op gt" data-t="OP VALUE!"><span>OP VALUE!</span></div>
+              <div class="btn green buy t shine"><span class="sweep"></span><img src="assets/icons/robux.png" alt="">49</div>
+            </div>
+            <img class="spark" src="assets/fx/star10.png" style="right:18px; top:6px" alt="">
+            <img class="spark" src="assets/fx/star10.png" style="right:258px; top:120px; width:26px; animation-delay:.6s" alt="">
+          </div>
+
+          <div class="row">
+            <div class="s3d card cyan">
+              <div class="tag t">POPULAR</div>
+              <h3 class="t">x2 Luck</h3>
+              <img class="icon" src="assets/icons/clover.png" alt="">
+              <div class="btn green t"><img src="assets/icons/robux.png" alt="">199</div>
+            </div>
+            <div class="s3d card mag">
+              <h3 class="t">Auto Hatch</h3>
+              <svg class="check" viewBox="0 0 54 54"><path d="M8 28 L22 42 L46 12" stroke="#000" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 28 L22 42 L46 12" stroke="#4BE36A" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <img class="icon" src="assets/icons/auto.png" alt="">
+              <div class="btn gray t">OWNED</div>
+            </div>
+            <div class="s3d card peach">
+              <h3 class="t">VIP</h3>
+              <img class="icon" src="assets/icons/vip.png" alt="">
+              <div class="btn green t"><img src="assets/icons/robux.png" alt="">99</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <h4>FX map → UIEffects.lua</h4>
+    <ul>
+      <li>Featured tab → Glow</li>
+      <li>Free Daily "1" badge → Ring</li>
+      <li>Free Daily rays → Spin</li>
+      <li>Starter Pack rainbow → Gloss</li>
+      <li>Starter sunburst → Spin</li>
+      <li>Starter BUY → Shine + Glow</li>
+      <li>OP VALUE! stars → Sparkles</li>
+      <li>Every button → Bounce</li>
+    </ul>
+    <h4 style="margin-top:16px">Polish checks</h4>
+    <ul>
+      <li class="ok">Studs: ui-resources Kek Universal (Overlay)</li>
+      <li class="ok">All 3D bottoms black</li>
+      <li class="ok">16px padding inside scroll (no cut-offs)</li>
+      <li class="ok">Scrollbar outside content</li>
+      <li class="ok">≥12–16px inside buttons / pills</li>
+      <li class="ok">Notes here, not on the UI</li>
+      <li class="ok">12px gap between header bar and body</li>
+      <li class="ok">≥18px under the starter items</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
