@@ -18,14 +18,14 @@ Show this numbered menu at the start (see SKILL.md step 1). Each style has a rec
 
 ---
 
-## 2. Stud (classic Roblox) — upgrade: **Studded Glass** (user's favorite reference)
+## 2. Stud (classic Roblox) — upgrade: **Studded Glass** (the signature look)
 Studded Glass = saturated gradient surfaces + stud grid texture on everything + big glass glare + slate-gray inner body + overflowing 3D icons + full-width rainbow/yellow header slab. See `signature-looks.md` for the exact layout (shop, HUD tiles, daily rewards, spin wheel).
 
 ### Basic Stud
 - **Shapes:** rectangles with small radius (2–4px) or none; chunky thick plates like bricks.
-- **Texture:** the Roblox **stud** pattern (circles in a grid with a soft top highlight) on panel tops. Get stud textures from ui-resources.com (tag *Stud*) or draw: circle 18px, 30px grid, inner light top + dark bottom shadow, overlay at 15–25% opacity.
+- **Texture:** the Roblox **stud** pattern (circles in a grid with a soft top highlight) on panel tops. ALWAYS a ui-resources.com stud texture (tag *Stud*), never homemade (SKILL.md rule 7).
 - **Colors:** classic brick colors — Bright red #C4281C, Bright blue #0D69AC, Bright yellow #F5CD30, Dark green #287F47, Medium stone grey #A3A2A5, plus a black 3px outline.
-- **Depth:** hard bottom lip 6px (darker shade), no soft shadows.
+- **Depth:** hard bottom lip 6px in BLACK #000000 (SKILL.md rule 11), no soft shadows.
 - **Font:** Luckiest Guy or Fredoka One (bold, blocky), white with black stroke.
 - **Buttons:** look like 2×1 bricks; pressed = lip shrinks to 2px.
 - **Roblox:** export the studded plates as 9-slice PNGs (studs, outline and lip baked in) and place them as ImageLabels.

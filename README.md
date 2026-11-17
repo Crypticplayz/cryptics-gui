@@ -31,6 +31,7 @@ The first time you use it, the skill thanks the creators and:
 ## Works best with
 - The **Figma MCP** (for the Figma path; without it the skill makes an HTML design board)
 - The **Roblox Studio MCP** (so it can import and assemble the UI in your game; without it you get the PNGs and the steps)
+- Optional: the **roblox-sfx** skill (UI sounds) and the **roblox-vfx** skill (textures for hatch/reward effects)
 
 ## Use it
 Type **`/cryptics-gui`** for the full guided flow, or just ask Claude something like *"make a shop UI for my pet simulator"*.
@@ -57,6 +58,21 @@ Type **`/cryptics-gui`** for the full guided flow, or just ask Claude something 
 | `/cryptics-gui export` | Export PNGs from an existing Figma file or HTML board |
 | `/cryptics-gui import` | Import the exported PNGs into Roblox Studio and assemble them (images only) |
 | `/cryptics-gui effects` | Add the animations (Bounce, Glow, Shine, Sparkles, Ring, Spin) to an assembled UI |
+| `/cryptics-gui audit` | Automatic check of the UI in Studio: sizes, phone tap targets, text fit, clipping, overlaps, off-screen |
+| `/cryptics-gui wire` | Make the UI work: windows, tabs, buttons, data-driven grids, formatted numbers (UIKit) |
+| `/cryptics-gui purchases` | Real Robux products, gamepasses and in-game currency buys, checked on the server |
+| `/cryptics-gui sounds` | A sound on every button, window and purchase (with the roblox-sfx skill) |
+| `/cryptics-gui gamepad` | Console / controller support: selection ring, focus, B to close |
+
+## What's new in v2.2
+- **AuditUI**: one command checks an assembled UI in Studio against every rule and lists what to fix.
+- **UIKit**: assembles your exported PNGs the same way every time: windows that open/close, tabs, buttons with bounce + sound, grids built from data (smooth with hundreds of pets), 1.2K / 3.4M number formats, timers, flipbook effects.
+- **Real purchases**: `Purchases.server.lua` handles Robux products, gamepasses (OWNED state) and coin purchases safely on the server.
+- **UI sounds** (roblox-sfx skill), **reward/hatch effects** (flipbooks, roblox-vfx textures), **console/gamepad support**, **colour-blind safe rarities** and **Reduce Motion**.
+- **New templates**: cartoony HUD, cartoony inventory and an Anime Glow shop for the HTML board.
+- **Tests**: test prompts (`evals/`) and a Studio self-test (`tests/selftest.lua`).
+- `LOCAL.md` keeps your own settings (icon folder, Figma plan) out of the shared files.
+- Fixes: Glow now draws behind buttons, Shine no longer clips them, effects clean themselves up, Bounce works on touch, and contradicting rules were cleaned up.
 
 ## Credits
 Huge thanks to everyone whose free resources this skill uses. See **[CREDITS.md](CREDITS.md)**.

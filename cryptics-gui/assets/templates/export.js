@@ -1,5 +1,11 @@
 // Skill Made By : Crypticplay_RBLX - Only on Youtube
 // Export helper for the UI board: isolates one piece at a time (no text, transparent bg) and reports layout.
+// Two modes:
+//   * Generic (every template from v2.2): mark exportable pieces in the HTML with
+//       data-piece="name" data-margin="10"   (and optional data-keep=".sel1,.sel2")
+//     and the layout origin with data-origin on the window element. EXPORT.layout() then lists every
+//     placed piece, icon and text relative to that origin, ready for the UIKit assembly script.
+//   * Legacy: the original cartoony shop selectors below (used when no [data-piece] exists).
 (function () {
   const css = document.createElement('style');
   css.textContent = `
@@ -17,7 +23,7 @@
   document.head.appendChild(css);
 
   const pills = () => document.querySelectorAll('.pill');
-  const PIECES = {
+  const LEGACY = {
     header:     { el: () => document.querySelector('.s3d.header'), m: 10 },
     body:       { el: () => document.querySelector('.s3d.body'), m: 10 },
     starter:    { el: () => document.querySelector('.s3d.starter'), m: 10, keep: ['.starter .decor', '.starter .ht'] },
@@ -42,11 +48,27 @@
     hud_badge:  { el: () => document.querySelector('.hud .badge-n'), m: 8 },
   };
 
+  let GENERIC = false;
+  function genericPieces() {
+    const out = {};
+    document.querySelectorAll('[data-piece]').forEach(el => {
+      const name = el.dataset.piece;
+      if (out[name]) return; // first element with a name is the exported image; others reuse it
+      out[name] = { el: () => document.querySelector(`[data-piece="${name}"]`), m: +(el.dataset.margin || 10),
+                    keep: el.dataset.keep ? el.dataset.keep.split(',') : undefined };
+    });
+    return out;
+  }
+  let PIECES = LEGACY;
+  // resolved on first use, so the script can load before the board's HTML
+  function resolve() { GENERIC = !!document.querySelector('[data-piece]'); PIECES = GENERIC ? genericPieces() : LEGACY; if (window.EXPORT) window.EXPORT.PIECES = PIECES; }
+
   function clear() {
     document.body.classList.remove('exporting');
     document.querySelectorAll('.xp-on,.xp-keep').forEach(n => n.classList.remove('xp-on', 'xp-keep'));
   }
   function prepare(name) {
+    resolve();
     clear();
     const p = PIECES[name]; const el = p.el();
     document.body.classList.add('exporting');
@@ -73,7 +95,33 @@
     return { x: +(r.left - origin.left).toFixed(1), y: +(r.top - origin.top).toFixed(1), w: +r.width.toFixed(1), h: +r.height.toFixed(1) };
   }
 
+  function genericLayout() {
+    clear();
+    const originEl = document.querySelector('[data-origin]') || document.querySelector('.win') || document.body;
+    const o = originEl.getBoundingClientRect();
+    const pieces = {};
+    for (const [k, p] of Object.entries(PIECES)) pieces[k] = { ...rel(p.el(), o), margin: p.m };
+    const place = [];
+    document.querySelectorAll('[data-piece]').forEach((el, i) => place.push({ piece: el.dataset.piece, order: i, role: el.dataset.role || null, ...rel(el, o) }));
+    const icons = [];
+    originEl.querySelectorAll('img').forEach(im => {
+      if (im.closest('.decor')) return;
+      const src = im.getAttribute('src');
+      icons.push({ src, file: src.split('/').pop(), cls: im.className, ...rel(im, o), rot: getComputedStyle(im).transform });
+    });
+    const texts = [];
+    originEl.querySelectorAll('.t, .gt, [data-text]').forEach(el => {
+      const txt = el.textContent.trim(); if (!txt) return;
+      const cs = getComputedStyle(el);
+      const g = el.classList.contains('gt') ? [cs.getPropertyValue('--g1').trim(), cs.getPropertyValue('--g2').trim()] : null;
+      texts.push({ text: txt, name: el.dataset.text || null, ...textRect(el, o), size: parseFloat(cs.fontSize), color: g ? null : cs.color, gradient: g });
+    });
+    return { window: { w: o.width, h: o.height }, pieces, place, icons, texts };
+  }
+
   function layout() {
+    resolve();
+    if (GENERIC) return genericLayout();
     clear();
     const win = document.querySelector('.win'); const o = win.getBoundingClientRect();
     const hud = document.querySelector('.hud'); const ho = hud.getBoundingClientRect();

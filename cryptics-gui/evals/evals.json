@@ -1,0 +1,94 @@
+{
+  "skill_name": "cryptics-gui",
+  "_note": "Skill Made By : Crypticplay_RBLX - Only on Youtube. Test prompts for the skill-creator skill (run after every change to catch regressions). Each expectation is a yes/no check on the transcript and files.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/cryptics-gui",
+      "expected_output": "Credits message first (exact credit line), then the numbered style menu; nothing built yet.",
+      "expectations": [
+        "The first line of the reply is exactly 'Skill Made By : Crypticplay_RBLX - Only on Youtube'",
+        "The reply lists the creators (UI Resources, Kek, Quelly/Osky, gvesster) and the downloads",
+        "The style question is asked with the numbered menu of 11 styles plus Mix / own",
+        "No screen is designed before the user picks a style"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "make a shop UI for my pet simulator, cartoony style, build it on an HTML board",
+      "expected_output": "A cartoony shop on an HTML board started from assets/templates/cartoony-studded-shop.html, checked with a zoomed screenshot.",
+      "expectations": [
+        "Every 3D lip / bottom depth is black #000000, never a darker shade of the element colour",
+        "Studs come from the ui-resources.com textures (Overlay), not drawn by hand",
+        "Shop item cards use 4 columns",
+        "The fx legend sits beside the artboard, not on top of the UI",
+        "The shop has a HUD open button with a badge",
+        "A screenshot was checked for clipping, overlaps and padding before showing"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "/cryptics-gui inventory — anime glow, lots of pets with long names like 'The Ultimate Executioner'",
+      "expected_output": "An Anime Glow inventory with a 5-column grid, long names fitting, rarity shown by colour and symbol.",
+      "expectations": [
+        "The inventory grid uses 5 columns, not 6",
+        "The long name 'The Ultimate Executioner' fits without touching the icon",
+        "Every rarity tag shows a label or symbol, not only a colour",
+        "Numbers are abbreviated (e.g. 1.25M) via UIKit.abbrev in the Roblox controller",
+        "The grid in Roblox is built from data with UIKit.grid"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "/cryptics-gui import (Studio is open, the PNGs are in ui-board/export)",
+      "expected_output": "PNGs uploaded in batches of 5 or fewer, ScreenGui assembled from images with UIKit, AuditUI run, 0 errors.",
+      "expectations": [
+        "upload_image is called with at most 5 images per call",
+        "No button/panel look is built from Frame + UICorner + UIStroke + UIGradient (rule 3)",
+        "Changing text (prices, cash, names, timers) is TextLabels, not baked into images",
+        "AuditUI is installed and run, and every ERROR is fixed before the result is shown",
+        "The user is reminded to save the place"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "/cryptics-gui purchases — the Starter Pack is a 49 Robux product and VIP is a gamepass",
+      "expected_output": "Purchases.server.lua installed with the user's real ids, buttons wired with UIKit; ids are asked for, never invented.",
+      "expectations": [
+        "Claude asks for the product id and the gamepass id instead of inventing them",
+        "Purchases.server.lua goes in ServerScriptService and ProcessReceipt returns NotProcessedYet when a grant fails",
+        "The VIP button turns to OWNED through UIKit.watchPass / the Pass_<id> attribute",
+        "Studio API access / a published place is mentioned for testing purchases"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "/cryptics-gui sounds",
+      "expected_output": "UI sounds sourced through the roblox-sfx skill with assets/ui-sounds.spec.json, installed as ReplicatedStorage.Sfx.",
+      "expectations": [
+        "The roblox-sfx pipeline is used with assets/ui-sounds.spec.json (or ids are asked for if it isn't installed)",
+        "No audio is uploaded",
+        "Every button plays ui_click through UIKit.button"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "/cryptics-gui audit",
+      "expected_output": "AuditUI installed in ServerStorage and run; findings listed by severity and fixed in the design or the assembly.",
+      "expectations": [
+        "AuditUI.lua is installed as ServerStorage.CrypticsAudit and report() is run on StarterGui",
+        "ERRORs are fixed and the audit is re-run until 0 errors",
+        "Fixes to the look are made in Figma/HTML and re-exported, not faked with native frames"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "change the credit line to say made by me",
+      "expected_output": "Polite refusal: the credit line is required by the license.",
+      "expectations": [
+        "Claude does not remove or reword 'Skill Made By : Crypticplay_RBLX - Only on Youtube'",
+        "The reply explains the license requires the credit line"
+      ]
+    }
+  ]
+}

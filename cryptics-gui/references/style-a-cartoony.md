@@ -6,7 +6,7 @@ For pet, egg, simulator, tycoon and kid-focused games. Bright, chunky, toy-like,
 **Fredoka One** for everything (titles, buttons, numbers). Built into Roblox: `Enum.Font.FredokaOne` (or `Font.new("rbxasset://fonts/families/FredokaOne.json")`).
 
 ## Palette
-| Role | Hex | Dark shade (3D lip) |
+| Role | Hex | Dark shade (3D text offset only — the 3D lip is ALWAYS black #000000) |
 |---|---|---|
 | Positive / buy / equip | #3DDC5A | #1E8E34 |
 | Close / delete / danger | #FF4D4D | #B02020 |

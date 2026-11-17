@@ -1,9 +1,9 @@
 ---
 name: cryptics-gui
-description: Design and build front-page-quality Roblox game GUI (HUD, inventory, shop, egg hatch, index, gamepasses, popups) in Figma or an HTML design board, then imports the PNGs into Roblox Studio and assembles them (it never designs the look with native Studio frames). Use whenever someone wants Roblox UI, GUI, HUD, menus, inventory/shop screens, buttons, frames, a UI kit or UI style for a Roblox game, wants to turn a Figma design into Roblox ScreenGui, or says their game's UI "looks bad / basic". Starts by crediting the creators whose free assets it uses and listing what to download, then asks which style the user wants from an 11-style menu (Cartoony, Stud, Anime Glow, Clean Modern, Glass, Pixel, Sci-Fi Neon, Fantasy, Horror, Candy Pastel, Military Metal), then designs Figma-first with the user's own icons and free assets from ui-resources.com, exports PNGs, then imports and assembles them in Roblox Studio with scale, 9-slice and mobile rules.
-argument-hint: "[help | credits | styles | hud | shop | inventory | hatch | index | gamepass | daily | popup | settings | kit | restyle | polish | export | import | effects]"
+description: Design and build front-page-quality Roblox game GUI (HUD, inventory, shop, egg hatch, index, gamepasses, popups) in Figma or an HTML design board, then imports the PNGs into Roblox Studio and assembles them (it never designs the look with native Studio frames). Use whenever someone wants Roblox UI, GUI, HUD, menus, inventory/shop screens, buttons, frames, a UI kit or UI style for a Roblox game, wants to turn a Figma design into Roblox ScreenGui, or says their game's UI "looks bad / basic". Starts by crediting the creators whose free assets it uses and listing what to download, then asks which style the user wants from a numbered menu of 11 styles (Cartoony, Stud, Anime Glow, Clean Modern, Glass, Pixel, Sci-Fi Neon, Fantasy, Horror, Candy Pastel, Military Metal) plus a Mix / own-reference option, then designs Figma-first with the user's own icons and free assets from ui-resources.com, exports PNGs, then imports and assembles them in Roblox Studio with scale, 9-slice and mobile rules, wires real purchases, UI sounds, gamepad support and data-driven grids, and audits the result automatically.
+argument-hint: "[help | credits | styles | hud | shop | inventory | hatch | index | gamepass | daily | popup | settings | kit | restyle | polish | export | import | effects | audit | wire | purchases | sounds | gamepad]"
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   author: "Crypticplay_RBLX (YouTube)"
   credit: "Skill Made By : Crypticplay_RBLX - Only on Youtube"
 ---
@@ -41,6 +41,11 @@ The text after `/cryptics-gui` picks what to do. Match it loosely (e.g. "pets" o
 | `/cryptics-gui export` | Export PNGs from an existing Figma file or HTML board |
 | `/cryptics-gui import` | Import the exported PNGs into Roblox Studio and assemble them (images only) |
 | `/cryptics-gui effects` | Add the animations (Bounce, Glow, Shine, Sparkles, Ring, Spin) to an assembled UI |
+| `/cryptics-gui audit` | Run the automatic Studio check (AuditUI) on an assembled UI and fix what it finds |
+| `/cryptics-gui wire` | Make an assembled UI work: UIKit windows, tabs, buttons, grids from data, formatted numbers |
+| `/cryptics-gui purchases` | Wire real Robux products, gamepasses and in-game currency buys (server-checked) |
+| `/cryptics-gui sounds` | Give every button, window and purchase a sound (roblox-sfx skill) |
+| `/cryptics-gui gamepad` | Console / gamepad support: selection ring, focus, B to close, button hints |
 
 How each command runs:
 - **First use in a session:** always post the credits + downloads message first (the "Start" section below), then go straight to the command.
@@ -54,11 +59,17 @@ How each command runs:
 - **export:** export PNGs following `references/figma-and-export.md` / `references/html-to-roblox.md` step 1.
 - **import:** do `references/html-to-roblox.md` steps 2–3 (upload + assemble from images only).
 - **effects:** install `assets/UIEffects.lua` and hook the effects from the "fx:" notes (`references/ui-effects.md`).
+- **audit:** install `assets/AuditUI.lua` as `ServerStorage.CrypticsAudit` (execute_luau, Source = file), run `require(game.ServerStorage.CrypticsAudit).report(game.StarterGui)`, show the ERROR/WARN list, fix each one in the design or the assembly, re-run until 0 errors. Also run it at the end of every `import`.
+- **wire:** install `assets/UIKit.lua` + `assets/UIEffects.lua` in ReplicatedStorage and write the controller LocalScript with UIKit (`references/input-and-accessibility.md` for grids and formatting).
+- **purchases:** `references/purchases.md` (ask for every product/pass id; never invent ids).
+- **sounds:** `references/ui-sounds.md` (uses the roblox-sfx skill with `assets/ui-sounds.spec.json`).
+- **gamepad:** `references/input-and-accessibility.md` → Gamepad and console.
 - Unknown command: show the help list and ask which one they meant.
 
 ## 0. The user's rules (non-negotiable — collected from every correction so far)
 
 **Workflow**
+0. **Read `LOCAL.md`** in this folder if it exists (this machine's icon folder, Figma plan, screenshot scale). If it doesn't, copy `LOCAL.template.md` to `LOCAL.md` the first time you learn one of those facts and save it there — never write personal paths into the other files.
 1. **Credits + downloads message first, then ask the style** with the numbered menu (step 1) every time. Never guess the style from one word.
 2. **A reference image beats a style word.** Match the screenshot (layout, colors, mood) and name the look back before building.
 3. **Design in Figma through the Figma MCP** (or the HTML board), export PNGs, then **import them into Roblox Studio and assemble them** (Studio MCP `upload_image` + `execute_luau`). **Never design the look in Studio**: don't build buttons, panels, headers, cards or pills out of native Frames + UICorner + UIStroke + UIGradient. In Studio, ScreenGui / Frames / ImageLabels / ImageButtons are only containers that hold and position the exported images; every visual (faces, black lips, outlines, gradients, studs, glare, glows) comes from the PNGs. The only things added in Studio are TextLabels for changing text and the UIEffects animations. If a piece is missing, export it from Figma/HTML, don't fake it with frames. If the Figma MCP is capped (Starter plan), say so at once, batch work into very few large calls, and offer the fallbacks in `references/figma-and-export.md`.
@@ -149,7 +160,7 @@ Recipes: style 1 → `references/style-a-cartoony.md`, style 3 → `references/s
 
 ## 3. Build the remaining screens
 
-Go through `references/screens-checklist.md`. Build reusable components first (Button, Card, Window, Header, Tab, CloseButton, Currency pill, StatPill) with properties/variants, then compose screens from instances.
+Go through `references/screens-checklist.md`. Build reusable components first (Button, Card, Window, Header, Tab, CloseButton, Currency pill, StatPill) with properties/variants, then compose screens from instances. Starting points for the HTML board: `assets/templates/` has a cartoony shop, a cartoony HUD, a cartoony inventory and an Anime Glow shop.
 
 ## 4. Choose the build path
 
@@ -163,13 +174,18 @@ Go through `references/screens-checklist.md`. Build reusable components first (B
 
 ## 5. Quality bar — check before calling it done
 
-- Readable at phone size (844×390 landscape): text ≥ ~14px equivalent, tap targets ≥ 60px tall
+- Readable at phone size (844×390 landscape): text ≥ 14px, tap targets ≥ 44px tall on the phone (≈ 120px at 1920×1080). `AuditUI` checks both
 - Everything sized with Scale + UIAspectRatioConstraint; nothing off-screen on phone, tablet, PC, console (Studio Device Emulator)
 - Changing text (cash, pet names, prices, timers) is real TextLabels, never baked into images
-- Long names fit (test "The Ultimate Executioner"); grids use 5 columns, not 6, when names are long
+- Long names fit (test "The Ultimate Executioner"); numbers go through `UIKit.abbrev` / `UIKit.time` so they never overflow
+- Grid columns: inventory / index / pet grids = 5 (never 6, long names collide with icons); shop item cards = 4 on desktop
 - Rarity colors consistent everywhere: Common gray, Uncommon green, Rare blue, Epic purple, Legendary gold, Mythic red, Secret rainbow
 - One primary action per window, brightest/most saturated button = the one you want clicked
-- Hover/press feedback on every button (tween scale)
+- Hover/press feedback on every button (tween scale) and a click sound (`references/ui-sounds.md`)
+- Buy buttons really buy: server-checked purchases (`references/purchases.md`), never placeholders
+- Gamepad: every button selectable, focus lands in the open window, B closes it
+- Rarity never colour-only (label or symbol too); Reduce Motion respected (`references/input-and-accessibility.md`)
+- `AuditUI` report: 0 errors
 - Close X always top-right
 
 ## 6. When something needs the user
@@ -190,3 +206,11 @@ If a step needs a click, sign-in, purchase, download or upload you can't do (Fig
 - `references/figma-and-export.md` — Figma file structure, naming, MCP gotchas, proven glow recipe, export
 - `references/roblox-studio-build.md` — assembling the imported PNGs: ScreenGui structure, scaling, 9-slice, tweens (never native-frame designs)
 - `references/resources.md` — ui-resources.com, fonts, icons, plugins, docs, creators
+- `assets/AuditUI.lua` — automatic Studio check of an assembled UI (scale, aspect, tap size, text size/fit, clipping, overlaps, off-screen, thumb zones, rule-3 native styling)
+- `assets/UIKit.lua` — assembles exported PNGs (pieces, icons, labels, windows, tabs, buttons), number/time formatting, virtualized data grids, flipbooks, gamepad focus, sounds, client purchase helpers
+- `assets/Purchases.server.lua` + `references/purchases.md` — ProcessReceipt, gamepasses, server-validated currency buys
+- `references/ui-sounds.md` + `assets/ui-sounds.spec.json` — UI sound roles for the roblox-sfx skill
+- `references/reward-vfx.md` — hatch/reward effects: UIEffects, flipbooks (roblox-vfx textures), world-space VFX
+- `references/input-and-accessibility.md` — gamepad/console, data-driven grids, number formats, colour-blind rarity, reduce motion, translation room
+- `LOCAL.template.md` — copy to `LOCAL.md` for this machine's settings (icon folder, Figma plan, screenshot scale); never shared
+- `evals/` — test prompts with expected results; `tests/` — Studio self-tests for UIKit and AuditUI

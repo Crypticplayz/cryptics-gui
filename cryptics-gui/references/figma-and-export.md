@@ -9,7 +9,7 @@
 ## Components and variants
 - Button: Color (Green/Red/Blue/Gray/Gold) × State (Default/Hover/Pressed/Disabled)
 - Card: Rarity (Common…Secret) × State (Default/Selected/Locked)
-- Use auto layout so labels can grow; set text to "Fredoka One"
+- Use auto layout so labels can grow; font = **Fredoka Bold** in Figma (Figma has no "Fredoka One"), FredokaOne in Roblox
 - Use color/effect styles (or variables) so a palette change updates everything
 
 ## Layer naming (matches Roblox instances)
@@ -41,7 +41,7 @@ Do NOT export (rebuild as Roblox instances):
 - Layout math: 4 cards of 232 in a 1000px wrap row need spacing ≤16 — check columns before screenshots.
 - ui-resources.com "Visit/Download" are JS buttons: intercept `window.open` in the page to read the target URL. itch.io packs: ask the user to download the pack themselves from its itch.io page and tell you the folder; check the pack's license file before using or sharing its icons. Always get the user's OK before downloading anything.
 - **When the Figma MCP cap is hit — fallbacks** (offer them, user picks): (a) user upgrades Figma (Professional/Org raises the cap); (b) wait for the cap to reset; (c) **HTML/CSS design board**: build the screen as a local HTML file (CSS gradients, blend modes, mask, filters, background-image studs from `assets/textures`, text-stroke) and render it in the browser pane — same "can't-do-in-Studio" quality, unlimited edits; export each piece as PNG by screenshotting elements; (d) give the user exact manual Figma steps.
-- **Figma MCP rate limit** (Figma docs): Starter plan or View/Collab seat = **20 calls per month**; Full/Dev seat on Professional/Org = 200 per day (10–15 per minute); Enterprise = 600 per day. The user is on Starter (View seat) — about 20 calls per month total. Batch work into few, large `use_figma` scripts (build a whole screen per call, include the screenshot in the same call), avoid separate read/inspect calls, and don't waste calls on tiny tweaks. If the cap is hit, stop, tell the user, and give manual Figma steps for anything left.
+- **Figma MCP rate limit** (Figma docs): Starter plan or View/Collab seat = **20 calls per month**; Full/Dev seat on Professional/Org = 200 per day (10–15 per minute); Enterprise = 600 per day. Read the user's plan from `LOCAL.md` (or ask once and save it there). Batch work into few, large `use_figma` scripts (build a whole screen per call, include the screenshot in the same call), avoid separate read/inspect calls, and don't waste calls on tiny tweaks. If the cap is hit, stop, tell the user, and give manual Figma steps for anything left.
 - If the user names a UI kit that isn't in `get_libraries` (e.g. "Kek UI Essentials"), say so and ask for the file/link; build in that style meanwhile.
 
 ## Handing off to Roblox

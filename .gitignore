@@ -1,0 +1,7 @@
+# Personal settings and downloaded third-party files never go in the repo
+cryptics-gui/LOCAL.md
+cryptics-gui/assets/textures/*.webp
+cryptics-gui/assets/fx/
+cryptics-gui/work/
+ui-board/
+*.zip

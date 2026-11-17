@@ -1,7 +1,7 @@
 # Animated UI effects (UIEffects module) — use on EVERY UI
 
 Files in this skill:
-- `assets/UIEffects.lua` — one ModuleScript version of all effects (+ Spin and Bounce). Put it in ReplicatedStorage as `UIEffects` and require it from LocalScripts. Every function returns a cleanup function.
+- `assets/UIEffects.lua` — one ModuleScript version of all effects (+ Spin and Bounce). Put it in ReplicatedStorage as `UIEffects` and require it from LocalScripts. Every function returns a cleanup function (safe to call twice); effects also clean themselves up when their target is destroyed. Glow draws as a sibling BEHIND the button and Shine uses its own rounded CanvasGroup mask, so Glow + Shine + Sparkles can share one button. Bounce returns to normal size after a tap on touch screens.
 
 Glow and Sparkles need two white PNGs (a soft glow and a 4-point sparkle, e.g. ui-resources.com → Effects: shine2.png, sparke.png). Upload them (Studio MCP `upload_image`) and set `FX.Images.Glow` / `FX.Images.Sparkle` to the ids before calling those effects. Tint with ImageColor3.
 

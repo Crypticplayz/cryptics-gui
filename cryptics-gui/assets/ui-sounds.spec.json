@@ -1,0 +1,16 @@
+{
+  "name": "cryptics-gui-ui",
+  "_note": "Skill Made By : Crypticplay_RBLX - Only on Youtube. Spec for the roblox-sfx skill: one role per UI event. Role names match UIKit.sound().",
+  "roles": [
+    { "name": "ui_click",         "query": "ui button click pop",         "kind": "SoundEffect", "min_len": 0.03, "max_len": 0.6, "volume": 0.5 },
+    { "name": "ui_hover",         "query": "ui hover tick soft",          "kind": "SoundEffect", "min_len": 0.02, "max_len": 0.4, "volume": 0.2 },
+    { "name": "tab_switch",       "query": "ui tab switch swipe",         "kind": "SoundEffect", "min_len": 0.05, "max_len": 0.6, "volume": 0.35 },
+    { "name": "window_open",      "query": "ui menu open whoosh pop",     "kind": "SoundEffect", "min_len": 0.1,  "max_len": 1.0, "volume": 0.45 },
+    { "name": "window_close",     "query": "ui menu close whoosh",        "kind": "SoundEffect", "min_len": 0.1,  "max_len": 1.0, "volume": 0.4 },
+    { "name": "purchase_success", "query": "purchase success cash register coins", "kind": "SoundEffect", "min_len": 0.2, "max_len": 2.5, "volume": 0.6 },
+    { "name": "purchase_fail",    "query": "ui error buzz denied",        "kind": "SoundEffect", "min_len": 0.1,  "max_len": 1.2, "volume": 0.45 },
+    { "name": "reward_claim",     "query": "reward claim chime sparkle",  "kind": "SoundEffect", "min_len": 0.3,  "max_len": 3.0, "volume": 0.6 },
+    { "name": "rare_hatch",       "query": "legendary reveal fanfare",    "kind": "SoundEffect", "min_len": 0.8,  "max_len": 5.0, "volume": 0.7 },
+    { "name": "notification",     "query": "notification ding bell",      "kind": "SoundEffect", "min_len": 0.1,  "max_len": 1.5, "volume": 0.45 }
+  ]
+}

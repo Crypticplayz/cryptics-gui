@@ -41,7 +41,7 @@ Read this before laying out ANY screen. A pretty component in a bad layout still
 ## 6. Shop layout that sells (keep it honest)
 - **Vertical tab rail on the left** (Featured ⭐, categories, Robux) frees width for the grid; selected tab gold + glow.
 - **Featured / Limited offer hero** at the top: big item art on a **rotating sunburst**, sparkles, title, what's inside, **real** countdown timer, old price struck through + new price, "-66%" badge, huge BUY button.
-- **Grid** below with a small section title; 4 columns on desktop, cards same size.
+- **Grid** below with a small section title; shop cards = 4 columns on desktop (inventory/index grids stay at 5), cards same size.
 - **Badges** on cards: HOT (red), NEW (blue), BEST VALUE (gold), LIMITED (purple). Max 1 badge per card, max ~3 per screen.
 - **States**: owned (gray button "OWNED" + check), locked (dark overlay + lock + requirement), can't afford (button stays green, shows "Need 2K more" on click).
 - **Value anchoring**: show bundles next to singles; mark the best one.
