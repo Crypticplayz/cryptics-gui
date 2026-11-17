@@ -4,139 +4,127 @@
 <meta charset="utf-8">
 <!-- Skill Made By : Crypticplay_RBLX - Only on Youtube -->
 <meta name="author" content="Crypticplay_RBLX">
-<title>HUD – Cartoony Studded</title>
+<title>HUD – Chunky Cartoony</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Luckiest+Guy&display=swap" rel="stylesheet">
 <style>
-  /* Same building blocks as cartoony-studded-shop.html: .s3d surface, .btn, .pill, .t text, .gt gradient text.
-     Export: every [data-piece] is one PNG (export.js generic mode). Text stays TextLabels in Roblox. */
-  :root { --lip: 7px; --stud: url(assets/tex/stud_kek.webp); }
+  /* Chunky cartoony HUD, built from real Roblox references (references/reference-first.md):
+     flat saturated faces, small corners, thick black outline + black lip, icons that break out of their
+     tiles, labels UNDER the tiles, effects only on the one thing that matters (Shop).
+     Values come from content.json (tools/build_content.py) — empty = text holder, never invented.
+     Every [data-piece] exports as one PNG; every [data-bind]/[data-field] stays a TextLabel. */
+  :root { --stud: url(assets/tex/stud_kek.webp); --ol: 5px; --lip: 7px; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: #20242c; font-family: 'Fredoka One', system-ui, sans-serif; color: #fff; }
+  body { margin: 0; background: #1a1d24; font-family: 'Fredoka One', system-ui, sans-serif; color: #fff; }
   .page { display: flex; gap: 40px; padding: 40px; align-items: flex-start; width: max-content; }
-
-  /* 1280x720 = a 16:9 game view; check the phone frame (844x390) with the zones toggle */
   .artboard { position: relative; width: 1280px; height: 720px; overflow: hidden; border-radius: 6px;
-    background: linear-gradient(180deg, #8fd8ff 0%, #bfeaff 55%, #6fcf6a 56%, #4caf50 100%); }
+    background: linear-gradient(180deg, #7cc8f2 0%, #b4e2f7 52%, #79c25a 53%, #5aa63f 100%); }
+  .artboard .scene { position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); font: 600 13px system-ui; color: rgba(0,0,0,.35); letter-spacing: .1em; }
   .hud { position: absolute; inset: 0; }
 
-  .s3d { position: absolute; border: 4px solid #000; border-radius: 22px; background: linear-gradient(135deg, var(--c1), var(--c2));
-    box-shadow: 0 var(--lip) 0 #000, inset 0 0 0 4px rgba(255,255,255,.45); }
-  .s3d::before { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    background: var(--stud) repeat; background-size: 200px auto; mix-blend-mode: overlay; opacity: .8; }
-  .s3d::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    background: linear-gradient(118deg, rgba(255,255,255,.26) 0 30%, transparent 30% 35%, rgba(255,255,255,.3) 35% 38%, transparent 38%); }
-  .s3d > * { position: relative; z-index: 1; }
-  .t { paint-order: stroke fill; -webkit-text-stroke: 6px #000; text-shadow: 0 3px 0 rgba(0,0,0,.55); }
-  .gt { position: relative; display: inline-block; white-space: nowrap; }
-  .gt::before { content: attr(data-t); position: absolute; left: 0; top: 0; color: #000; -webkit-text-stroke: 10px #000; text-shadow: 0 5px 0 #000; }
-  .gt > span { position: relative; color: transparent; background: linear-gradient(180deg, var(--g1), var(--g2)); -webkit-background-clip: text; background-clip: text; }
+  .t { paint-order: stroke fill; -webkit-text-stroke: 6px #000; text-shadow: 0 3px 0 #000; }
 
-  .green { --c1: #a6f7b3; --c2: #2fcf4f; } .gold { --c1: #fff0b8; --c2: #ffbf2e; } .navy { --c1: #8cc0f5; --c2: #2e6cc4; }
-  .red { --c1: #ffb0b0; --c2: #f03c3c; } .mag { --c1: #ffb8f4; --c2: #d63bdb; } .cyan { --c1: #b9f7ff; --c2: #2fc6e8; }
-  .peach { --c1: #ffe2b8; --c2: #ff9f4a; } .purple { --c1: #d9c2ff; --c2: #8a4dff; }
+  /* block = one flat face + black outline + black lip (rule 11) + faint studs */
+  .block { position: absolute; border: var(--ol) solid #000; border-radius: 14px; background: var(--f);
+    box-shadow: 0 var(--lip) 0 #000, inset 0 -10px 0 rgba(0,0,0,.18), inset 0 4px 0 rgba(255,255,255,.35); }
+  .block::before { content: ''; position: absolute; inset: 0; border-radius: 9px; pointer-events: none;
+    background: var(--stud) repeat; background-size: 180px auto; mix-blend-mode: overlay; opacity: .35; }
+  .block > * { position: relative; z-index: 1; }
+  .yellow { --f: #ffc928; } .blue { --f: #2f8cff; } .purple { --f: #9b51ff; } .pink { --f: #ff4fae; }
+  .green { --f: #34d058; } .slate { --f: #4c5a78; } .orange { --f: #ff8a1f; } .red { --f: #ff3b3b; } .navy { --f: #1f2b48; }
 
-  /* currency pills — top-left, clear of Roblox's menu buttons (CoreUISafeInsets) */
-  .pill { position: absolute; display: flex; align-items: center; height: 54px; padding: 0 12px 0 64px; gap: 12px;
-    border: 4px solid #000; border-radius: 28px; background: linear-gradient(180deg, #fff, #e3efff); box-shadow: 0 6px 0 #000; }
-  .pill .ico { position: absolute; left: -14px; top: 50%; transform: translateY(-50%); width: 68px; height: 68px; object-fit: contain; filter: drop-shadow(0 3px 0 rgba(0,0,0,.35)); }
-  .pill .amt { font-size: 28px; min-width: 110px; }
-  .pill .plus { width: 32px; height: 32px; object-fit: contain; flex: none; }
+  /* currency: dark slab, icon breaking out on the left, green + square at the end */
+  .cur { position: absolute; left: 92px; height: 56px; width: 250px; --f: #1f2b48; display: flex; align-items: center; padding: 0 64px 0 70px; }
+  .cur .ico { position: absolute; left: -26px; top: 50%; width: 82px; height: 82px; transform: translateY(-52%) rotate(-8deg); object-fit: contain; z-index: 2; }
+  .cur .amt { font-size: 30px; white-space: nowrap; }
+  .cur .add { position: absolute; right: 6px; top: 6px; width: 38px; height: 34px; border: 4px solid #000; border-radius: 9px; background: #34d058;
+    box-shadow: 0 4px 0 #000, inset 0 -6px 0 rgba(0,0,0,.18); display: grid; place-items: center; font-size: 28px; line-height: 1; }
 
-  /* menu tiles — left side, 3x2 above the joystick zone, 16px gaps, label pill at the bottom, icon overflows the top */
-  .tiles { position: absolute; left: 24px; top: 180px; display: grid; grid-template-columns: repeat(3, 104px); gap: 24px 16px; }
-  .tile { position: relative !important; width: 104px; height: 104px; display: grid; place-items: center; }
-  .tile img { width: 84px; height: 84px; object-fit: contain; margin-top: -26px; filter: drop-shadow(0 4px 0 rgba(0,0,0,.35)); }
-  .tile .lbl { position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%); font-size: 18px; white-space: nowrap; }
-  .badge-n { position: absolute; right: -12px; top: -12px; width: 36px; height: 36px; border-radius: 50%; border: 4px solid #000;
-    background: linear-gradient(180deg,#ff8a8a,#e81e1e); display: grid; place-items: center; font-size: 18px; z-index: 3;
-    animation: ring 1.6s ease-in-out infinite; transform-origin: 50% 10%; }
-  .tile.hero { box-shadow: 0 var(--lip) 0 #000, inset 0 0 0 4px rgba(255,255,255,.6), 0 0 26px 6px rgba(255,224,102,.9); }
-
-  /* boosts — top-center */
-  .boosts { position: absolute; left: 50%; top: 18px; transform: translateX(-50%); display: flex; gap: 16px; }
-  .boost { position: relative !important; width: 150px; height: 62px; display: flex; align-items: center; gap: 8px; padding: 0 14px; }
-  .boost img { width: 40px; height: 40px; object-fit: contain; }
-  .boost .tm { font-size: 22px; } .boost .sub { position: absolute; left: 0; right: 0; bottom: -26px; text-align: center; font-size: 15px; }
-
-  /* offers — right side */
-  .offers { position: absolute; right: 24px; top: 150px; display: flex; flex-direction: column; gap: 22px; align-items: flex-end; }
-  .offer { position: relative !important; width: 260px; height: 76px; display: flex; align-items: center; gap: 12px; padding: 0 16px; }
-  .offer img { width: 56px; height: 56px; object-fit: contain; margin-top: -14px; }
-  .offer .txt { display: flex; flex-direction: column; } .offer .a { font-size: 22px; white-space: nowrap; } .offer .b { font-size: 15px; opacity: .95; white-space: nowrap; }
-
-  /* zones overlay (toggle with Z): joystick bottom-left, jump bottom-right, Roblox menu top-left */
-  .zones { position: absolute; inset: 0; pointer-events: none; display: none; }
-  .zones.on { display: block; }
-  .zone { position: absolute; border: 3px dashed #ff3b3b; background: rgba(255,59,59,.15); font: 14px system-ui; color: #fff; padding: 6px; }
-
-  @keyframes ring { 0%,60%,100% { transform: rotate(0) } 65% { transform: rotate(30deg) } 70% { transform: rotate(-30deg) } 75% { transform: rotate(18deg) } 80% { transform: rotate(-18deg) } 85% { transform: rotate(8deg) } 90% { transform: rotate(-8deg) } }
-  @keyframes bob { 0%,85%,100% { transform: translateY(0) } 90% { transform: translateY(-6px) } 95% { transform: translateY(2px) } }
+  /* menu tiles: 3 x 2, icon bigger than the tile, label underneath */
+  .menu { position: absolute; left: 30px; top: 196px; display: grid; grid-template-columns: repeat(3, 96px); gap: 34px 14px; }
+  .tile { position: relative !important; width: 96px; height: 96px; }
+  .tile .ico { position: absolute; left: 50%; top: 40%; width: 86px; height: 86px; object-fit: contain; transform: translate(-50%, -50%) rotate(-6deg); z-index: 2; }
+  .tile .lbl { position: absolute; left: 50%; top: calc(100% + 10px); transform: translateX(-50%); font-size: 19px; white-space: nowrap; z-index: 3; }
+  .badge { position: absolute; right: -14px; top: -14px; min-width: 36px; height: 36px; padding: 0 8px; border: 4px solid #000; border-radius: 18px;
+    background: #ff3b3b; box-shadow: 0 3px 0 #000; display: grid; place-items: center; font-size: 20px; z-index: 4; }
   .tile.hero { animation: bob 5s ease-in-out infinite; }
 
-  .legend { width: 320px; background: #1b1530; border-radius: 16px; padding: 18px 20px; font-family: system-ui, sans-serif; }
-  .legend h4 { margin: 0 0 10px; font: 20px 'Fredoka One', sans-serif; }
-  .legend li { margin: 6px 0; color: #ffb8f2; font-size: 14px; } .legend .ok { color: #9dffb0; }
+  /* boosts: compact dark chips, multiplier in yellow */
+  .boosts { position: absolute; left: 50%; top: 16px; transform: translateX(-50%); display: flex; gap: 12px; }
+  .boost { position: relative !important; height: 52px; min-width: 150px; --f: rgba(20,28,48,.88); --ol: 4px; --lip: 5px; display: flex; align-items: center; gap: 8px; padding: 0 14px 0 52px; }
+  .boost .ico { position: absolute; left: -10px; top: 50%; width: 60px; height: 60px; transform: translateY(-50%); object-fit: contain; }
+  .boost .mul { font-size: 22px; color: #ffd84a; } .boost .tm { font-size: 20px; }
+
+  /* offers: wide slabs, icon breaking out left, italic title, timer chip */
+  .offers { position: absolute; right: 26px; top: 120px; display: flex; flex-direction: column; gap: 26px; }
+  .offer { position: relative !important; width: 262px; min-height: 84px; padding-top: 8px; padding-bottom: 8px; display: flex; flex-direction: column; justify-content: center; padding-left: 84px; }
+  .offer .ico { position: absolute; left: -24px; top: 50%; width: 100px; height: 100px; transform: translateY(-54%) rotate(-8deg); object-fit: contain; }
+  .offer .ttl { font-family: 'Luckiest Guy', 'Fredoka One', sans-serif; font-size: 22px; line-height: 1.02; max-width: 168px; transform: rotate(-2deg); transform-origin: left; overflow-wrap: anywhere; }
+  .offer .chip { align-self: flex-start; margin-top: 6px; padding: 1px 10px 3px; border: 3px solid #000; border-radius: 9px; background: rgba(0,0,0,.35); font-size: 15px; }
+
+  /* mobile zones overlay — press Z */
+  .zones { position: absolute; inset: 0; pointer-events: none; display: none; }
+  .zones.on { display: block; }
+  .zone { position: absolute; border: 3px dashed #ff3b3b; background: rgba(255,59,59,.14); font: 600 13px system-ui; color: #fff; padding: 6px; }
+
+  @keyframes bob { 0%,86%,100% { transform: translateY(0) } 90% { transform: translateY(-7px) } 95% { transform: translateY(2px) } }
+
+  .legend { width: 300px; background: #11141b; border: 1px solid #2a2f3b; border-radius: 12px; padding: 16px 18px; font-family: system-ui, sans-serif; }
+  .legend h4 { margin: 0 0 8px; font: 18px 'Fredoka One', sans-serif; }
+  .legend li { margin: 5px 0; color: #c9cfdb; font-size: 13px; }
 </style>
 </head>
 <body>
 <div class="page">
   <div class="artboard" id="artboard">
+    <div class="scene">GAME VIEW</div>
     <div class="hud" data-origin>
-      <div class="pill" data-piece="pill_coin" style="left:88px; top:22px"><img class="ico" src="assets/icons/coin.png" alt=""><span class="amt t" data-text="Lbl_Coins" style="color:#ffd04a">1.25M</span><img class="plus" src="assets/icons/plus.png" alt=""></div>
-      <div class="pill" data-piece="pill_gem" style="left:88px; top:86px"><img class="ico" src="assets/icons/blue_gem.png" alt=""><span class="amt t" data-text="Lbl_Gems" style="color:#7fdcff; min-width:70px">250</span><img class="plus" src="assets/icons/plus.png" alt=""></div>
+      <div class="block cur" data-piece="cur" style="top:22px"><img class="ico" data-bind="currencies.coins.icon" alt=""><span class="amt t" data-bind="currencies.coins.amount" data-format="abbrev" data-ph="COINS"></span><span class="add t" data-piece="add">+</span></div>
+      <div class="block cur" data-piece="cur" style="top:96px"><img class="ico" data-bind="currencies.gems.icon" alt=""><span class="amt t" data-bind="currencies.gems.amount" data-format="abbrev" data-ph="GEMS"></span><span class="add t">+</span></div>
 
       <div class="boosts">
-        <div class="s3d boost green" data-piece="boost_green"><img src="assets/icons/clover.png" alt=""><span class="tm t" data-text="Lbl_LuckTime">09:59</span><span class="sub t">x2 Luck</span></div>
-        <div class="s3d boost gold" data-piece="boost_gold"><img src="assets/icons/coin.png" alt=""><span class="tm t" data-text="Lbl_CashTime">24:10</span><span class="sub t">x2 Cash</span></div>
+        <div class="block boost" data-piece="boost"><img class="ico" data-bind="boosts.luck.icon" alt=""><span class="mul t" data-bind="boosts.luck.multiplier" data-prefix="x" data-ph="x?"></span><span class="tm t" data-bind="boosts.luck.seconds_left" data-format="time" data-ph="TIME"></span></div>
+        <div class="block boost" data-piece="boost"><img class="ico" data-bind="boosts.cash.icon" alt=""><span class="mul t" data-bind="boosts.cash.multiplier" data-prefix="x" data-ph="x?"></span><span class="tm t" data-bind="boosts.cash.seconds_left" data-format="time" data-ph="TIME"></span></div>
       </div>
 
-      <div class="tiles">
-        <div class="s3d tile gold hero" data-piece="tile_gold" data-role="open:Shop"><img src="assets/icons/cart.png" alt=""><span class="lbl t">SHOP</span><div class="badge-n t" data-piece="badge">!</div></div>
-        <div class="s3d tile cyan" data-piece="tile_cyan" data-role="open:Pets"><img src="assets/icons/paw.png" alt=""><span class="lbl t">PETS</span></div>
-        <div class="s3d tile purple" data-piece="tile_purple" data-role="open:Index"><img src="assets/icons/book.png" alt=""><span class="lbl t">INDEX</span></div>
-        <div class="s3d tile mag" data-piece="tile_mag" data-role="open:Rebirth"><img src="assets/icons/rebirth.png" alt=""><span class="lbl t">REBIRTH</span></div>
-        <div class="s3d tile green" data-piece="tile_green" data-role="open:Daily"><img src="assets/icons/gift.png" alt=""><span class="lbl t">DAILY</span><div class="badge-n t">1</div></div>
-        <div class="s3d tile navy" data-piece="tile_navy" data-role="open:Settings"><img src="assets/icons/gear.png" alt=""><span class="lbl t">SETTINGS</span></div>
+      <div class="menu">
+        <div class="block tile yellow hero" data-piece="tile_yellow" data-role="open:Shop"><img class="ico" src="assets/icons/cart.png" alt=""><span class="lbl t" data-bind="text.hud_shop" data-ph="SHOP"></span><span class="badge t" data-piece="badge">!</span></div>
+        <div class="block tile blue" data-piece="tile_blue" data-role="open:Pets"><img class="ico" src="assets/icons/paw.png" alt=""><span class="lbl t" data-bind="text.hud_pets" data-ph="PETS"></span></div>
+        <div class="block tile purple" data-piece="tile_purple" data-role="open:Index"><img class="ico" src="assets/icons/book.png" alt=""><span class="lbl t" data-bind="text.hud_index" data-ph="INDEX"></span></div>
+        <div class="block tile pink" data-piece="tile_pink" data-role="open:Rebirth"><img class="ico" src="assets/icons/rebirth.png" alt=""><span class="lbl t" data-bind="text.hud_rebirth" data-ph="REBIRTH"></span></div>
+        <div class="block tile green" data-piece="tile_green" data-role="open:Daily"><img class="ico" src="assets/icons/gift.png" alt=""><span class="lbl t" data-bind="text.hud_daily" data-ph="DAILY"></span></div>
+        <div class="block tile slate" data-piece="tile_slate" data-role="open:Settings"><img class="ico" src="assets/icons/settings.png" alt=""><span class="lbl t" data-bind="text.hud_settings" data-ph="SETTINGS"></span></div>
       </div>
 
       <div class="offers">
-        <div class="s3d offer green" data-piece="offer_green" data-role="claim:FreeGift"><img src="assets/icons/gift.png" alt=""><div class="txt"><span class="a t">Free Gift</span><span class="b t" data-text="Lbl_GiftTime">in 4:59</span></div></div>
-        <div class="s3d offer peach" data-piece="offer_peach" data-role="open:Shop"><img src="assets/icons/star.png" alt=""><div class="txt"><span class="a t">Starter Pack</span><span class="b t">-66% today</span></div></div>
-        <div class="s3d offer navy" data-piece="offer_navy" data-role="invite"><img src="assets/icons/invite.png" alt=""><div class="txt"><span class="a t">Invite</span><span class="b t">+10% Cash</span></div></div>
+        <div class="block offer green" data-piece="offer_green" data-role="claim:FreeGift"><img class="ico" src="assets/icons/gift.png" alt=""><span class="ttl t" data-bind="text.offer_free_gift" data-ph="OFFER"></span><span class="chip t" data-bind="boosts.free_gift.seconds_left" data-format="time" data-ph="TIMER"></span></div>
+        <div class="block offer orange" data-piece="offer_orange" data-role="open:Shop"><img class="ico" data-bind="shop.0.icon" alt=""><span class="ttl t" data-bind="shop.0.name" data-ph="FEATURED"></span><span class="chip t" data-bind="shop.0.badge" data-ph="BADGE"></span></div>
+        <div class="block offer blue" data-piece="offer_blue" data-role="invite"><img class="ico" src="assets/icons/invite.png" alt=""><span class="ttl t" data-bind="text.offer_invite" data-ph="INVITE"></span></div>
       </div>
     </div>
 
     <div class="zones" id="zones">
-      <div class="zone" style="left:0; top:0; width:80px; height:70px">Roblox menu</div>
-      <div class="zone" style="left:0; bottom:0; width:330px; height:290px">Joystick (mobile)</div>
-      <div class="zone" style="right:0; bottom:0; width:300px; height:300px">Jump (mobile)</div>
-      <div class="zone" style="left:430px; bottom:0; width:420px; height:160px; border-color:#ffd04a; background:rgba(255,208,74,.12)">Keep clear (gameplay)</div>
+      <div class="zone" style="left:0; top:0; width:80px; height:64px">Roblox menu</div>
+      <div class="zone" style="left:0; bottom:0; width:330px; height:270px">Joystick (mobile)</div>
+      <div class="zone" style="right:0; bottom:0; width:290px; height:290px">Jump (mobile)</div>
+      <div class="zone" style="left:430px; bottom:0; width:420px; height:150px; border-color:#ffd84a; background:rgba(255,216,74,.12)">Keep clear (gameplay)</div>
     </div>
   </div>
 
   <div class="legend">
-    <h4>FX map → UIEffects.lua</h4>
+    <h4>Notes</h4>
     <ul>
-      <li>SHOP tile → Glow + Shine + idle bob every 5 s</li>
-      <li>"!" and "1" badges → Ring (stop after opening)</li>
-      <li>Free Gift → Shine while claimable</li>
-      <li>Every tile / pill "+" → Bounce + ui_click</li>
-      <li>Boost timers → UIKit.time, Coins → UIKit.abbrev</li>
-    </ul>
-    <h4 style="margin-top:16px">Checks</h4>
-    <ul>
-      <li class="ok">Press Z: thumb zones + Roblox menu stay empty</li>
-      <li class="ok">Tiles 104px ≥ 44px on phone</li>
-      <li class="ok">All 3D bottoms black</li>
-      <li class="ok">Labels are TextLabels (data-text)</li>
-      <li class="ok">Max 3 badges visible</li>
+      <li>Values: content sheets → tools/build_content.py → content.json. Dashed boxes = not filled in yet.</li>
+      <li>FX: Shop tile → Glow + idle bob; "!" badge → Ring (stop after opening); every tile → Bounce + ui_click.</li>
+      <li>Press Z: thumb zones and the Roblox menu corner must stay empty.</li>
+      <li>Icons: tools/icons_from_pack.py (gvesster Free Icon Pack) or your own.</li>
     </ul>
   </div>
 </div>
 <script>
   document.addEventListener('keydown', e => { if (e.key.toLowerCase() === 'z') document.getElementById('zones').classList.toggle('on'); });
 </script>
+<script src="content.js"></script>
 <script src="export.js"></script>
 </body>
 </html>

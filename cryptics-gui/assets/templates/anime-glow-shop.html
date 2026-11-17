@@ -4,146 +4,126 @@
 <meta charset="utf-8">
 <!-- Skill Made By : Crypticplay_RBLX - Only on Youtube -->
 <meta name="author" content="Crypticplay_RBLX">
-<title>Shop – Anime Glow</title>
+<title>Shop – Anime Dark</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,800;0,900;1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;0,800;1,900&display=swap" rel="stylesheet">
 <style>
-  /* Style 3 — Anime Glow (references/style-b-anime.md): dark navy→charcoal surfaces, gradient neon strokes,
-     slashed header, crystalline primary buttons, 2.5D icons breaking out of stat boxes, 4-column shop grid.
-     Every [data-piece] = one PNG. Text stays TextLabels (Montserrat + black UIStroke). */
+  /* Anime / dark shop, built from real references (references/reference-first.md): flat dark panels,
+     small corners, ONE accent colour (change --accent), dense but ordered information, a slanted title tab,
+     the item art is the hero. Glow is used once (the hero buy button) — never neon on every edge.
+     Rows come from shop.csv (content.json); empty = text holder. Rarity = colour strip + the word. */
+  :root { --accent: #ff3355; --bg: #101219; --panel: #171a23; --panel2: #1e2230; --line: #2b3040; --muted: #8b93a7; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: #0b0a12; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 800; color: #fff; }
+  body { margin: 0; background: #0b0c10; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 800; color: #fff; }
   .page { display: flex; gap: 40px; padding: 40px; align-items: flex-start; width: max-content; }
   .artboard { position: relative; width: 1280px; height: 800px; overflow: hidden; border-radius: 6px;
-    background: radial-gradient(ellipse at 30% 20%, #2b1a4a, #0e0b18 70%); }
+    background: linear-gradient(180deg, #3a4660, #1c2130 60%, #151925); }
+  .t { paint-order: stroke fill; -webkit-text-stroke: 4px #000; }
+  .it { font-style: italic; font-weight: 900; text-transform: uppercase; letter-spacing: .01em; }
 
-  /* gradient-stroke neon panel: background = fill, ::before = gradient ring masked to a border */
-  .neon { position: absolute; border-radius: 18px; background: linear-gradient(180deg, #2a1740, #0f0918);
-    box-shadow: 0 0 28px rgba(177,76,255,.55), inset 0 0 22px rgba(177,76,255,.35); }
-  .neon::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 3px; pointer-events: none;
-    background: linear-gradient(135deg, var(--s1, #b14cff), var(--s2, #ff4fd8));
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
-  .neon::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; overflow: hidden;
-    background: linear-gradient(120deg, transparent 0 40%, rgba(255,255,255,.05) 40% 46%, transparent 46% 60%, rgba(255,255,255,.04) 60% 63%, transparent 63%); }
-  .neon > * { position: relative; z-index: 1; }
+  .win { position: absolute; left: 80px; top: 92px; width: 1120px; height: 640px; }
+  .panel { position: absolute; left: 0; top: 34px; width: 1120px; height: 606px; background: var(--bg); border: 2px solid var(--line); border-radius: 10px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.55); }
+  /* slanted title tab breaking out of the top edge */
+  .tab-title { position: absolute; left: 28px; top: 0; height: 68px; padding: 0 44px 0 28px; background: var(--accent);
+    clip-path: polygon(0 0, 100% 0, calc(100% - 26px) 100%, 0 100%); display: flex; align-items: center; z-index: 3; }
+  .tab-title span { font-size: 40px; }
+  .tab-title::after { content: ''; position: absolute; left: 0; right: 26px; bottom: 0; height: 6px; background: rgba(0,0,0,.25); }
+  .close { position: absolute; right: 16px; top: 50px; width: 46px; height: 46px; border-radius: 8px; background: var(--panel2); border: 2px solid var(--line);
+    display: grid; place-items: center; z-index: 3; font-size: 22px; color: var(--muted); }
+  .cur { position: absolute; right: 74px; top: 50px; height: 46px; padding: 0 16px 0 52px; border-radius: 8px; background: var(--panel2); border: 2px solid var(--line);
+    display: flex; align-items: center; font-size: 20px; z-index: 3; }
+  .cur img { position: absolute; left: 6px; top: 50%; width: 40px; height: 40px; transform: translateY(-50%); }
 
-  .t { paint-order: stroke fill; -webkit-text-stroke: 5px #000; text-shadow: 0 0 12px rgba(255,79,216,.55); }
-  /* inverted header text: dark fill + bright outline */
-  .inv { color: #170d26; -webkit-text-stroke: 3px #fff; paint-order: stroke fill; text-shadow: 0 0 18px rgba(255,255,255,.6); font-style: italic; font-weight: 900; }
+  /* left nav */
+  .nav { position: absolute; left: 20px; top: 118px; width: 200px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
+  .nav .i { height: 52px; border-radius: 8px; display: flex; align-items: center; gap: 12px; padding: 0 14px; color: var(--muted); font-size: 16px; text-transform: uppercase; }
+  .nav .i img { width: 32px; height: 32px; object-fit: contain; filter: grayscale(.6) brightness(.85); }
+  .nav .i.sel { background: var(--panel2); color: #fff; box-shadow: inset 4px 0 0 var(--accent); }
+  .nav .i.sel img { filter: none; }
 
-  .win { position: absolute; left: 70px; top: 90px; width: 1140px; height: 680px; }
-  .panel { left: 0; top: 60px; width: 1140px; height: 620px; }
-  /* slashed header slab overlapping the top edge */
-  .header { position: absolute; left: 40px; top: 0; width: 520px; height: 108px; z-index: 3;
-    clip-path: polygon(6% 0, 100% 0, 92% 100%, 0 100%); background: linear-gradient(90deg, #ff4fd8, #b14cff 55%, #5b6cff);
-    box-shadow: 0 0 30px rgba(255,79,216,.7); }
-  .header::after { content: ''; position: absolute; inset: 6px; clip-path: inherit; background: linear-gradient(90deg, rgba(0,0,0,.25), transparent); }
-  .htitle { position: absolute; left: 96px; top: 14px; font-size: 64px; z-index: 4; }
-  .close { position: absolute; right: 22px; top: 82px; width: 64px; height: 64px; z-index: 4; display: grid; place-items: center; font-size: 30px;
-    clip-path: polygon(18% 0, 100% 0, 100% 82%, 82% 100%, 0 100%, 0 18%); background: linear-gradient(180deg, #3a1630, #1a0a14);
-    box-shadow: inset 0 0 0 3px #ff4f7a, 0 0 20px rgba(255,79,122,.8); }
+  /* hero banner */
+  .hero { position: absolute; left: 236px; top: 118px; width: 864px; height: 220px; border-radius: 10px; overflow: hidden; background: var(--panel);
+    border: 2px solid var(--line); z-index: 1; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,51,85,.28), transparent 55%),
+    repeating-linear-gradient(115deg, rgba(255,255,255,.035) 0 2px, transparent 2px 14px); }
+  .hero .art { position: absolute; left: 24px; top: 50%; width: 220px; height: 220px; transform: translateY(-50%) rotate(-6deg); object-fit: contain; z-index: 1; }
+  .hero .tag { position: absolute; left: 270px; top: 26px; padding: 4px 10px; background: var(--accent); border-radius: 4px; font-size: 13px; font-style: italic; }
+  .hero h2 { position: absolute; left: 270px; top: 58px; margin: 0; font-size: 40px; line-height: 1; max-width: 330px; }
+  .hero .desc { position: absolute; left: 272px; top: 136px; max-width: 320px; color: #c7cddb; font-weight: 600; font-size: 15px; }
+  .hero .timer { position: absolute; left: 272px; bottom: 18px; display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--muted); }
+  .hero .timer img { width: 26px; height: 26px; }
+  .hero .timer b { color: #fff; }
+  .hero .buy { position: absolute; right: 24px; bottom: 24px; width: 230px; height: 64px; border-radius: 8px; background: var(--accent);
+    display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 26px; box-shadow: 0 0 28px rgba(255,51,85,.45), inset 0 -5px 0 rgba(0,0,0,.25); }
+  .hero .buy img { width: 34px; height: 34px; }
+  .hero .old { position: absolute; right: 268px; bottom: 44px; color: var(--muted); text-decoration: line-through; font-size: 18px; }
 
-  .search { position: absolute; left: 600px; top: 96px; width: 300px; height: 46px; border-radius: 12px; background: rgba(0,0,0,.45);
-    border: 2px solid rgba(255,255,255,.12); display: flex; align-items: center; padding: 0 14px; color: #8d7fae; font-size: 17px; z-index: 3; }
-  .cur { position: absolute; top: 96px; height: 46px; display: flex; align-items: center; gap: 8px; padding: 0 14px 0 50px; border-radius: 12px; z-index: 3;
-    background: linear-gradient(90deg, #1a2a4a, #0f1626); box-shadow: inset 0 0 0 2px #4fd3ff, 0 0 16px rgba(79,211,255,.5); font-size: 20px; }
-  .cur img { position: absolute; left: -10px; top: -10px; width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(79,211,255,.8)); }
+  /* item grid: 4 columns, rarity = colour strip + word */
+  .grid { position: absolute; left: 236px; top: 354px; width: 864px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; z-index: 1; }
+  .card { position: relative; height: 222px; border-radius: 10px; background: var(--panel); border: 2px solid var(--line); overflow: hidden; }
+  .card::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 60%; background: linear-gradient(0deg, var(--r, #4c5a78) 0%, transparent 100%); opacity: .35; }
+  .card::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--r, #4c5a78); }
+  .card .bdg { position: absolute; right: 8px; top: 12px; padding: 3px 8px; border-radius: 4px; font-size: 11px; background: var(--accent); font-style: italic; z-index: 2; }
+  .card img.ic { position: absolute; left: 50%; top: 22px; width: 108px; height: 108px; transform: translateX(-50%); object-fit: contain; z-index: 1; }
+  .card .nm { position: absolute; left: 12px; right: 12px; top: 134px; font-size: 16px; text-transform: uppercase; font-style: italic; z-index: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .pr { position: absolute; left: 10px; right: 10px; bottom: 10px; height: 40px; border-radius: 6px; background: #ffffff14; border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 18px; z-index: 1; }
+  .card .pr img { width: 26px; height: 26px; }
+  .common { --r: #9aa5b4; } .uncommon { --r: #34d058; } .rare { --r: #2f8cff; } .epic { --r: #9b51ff; } .legendary { --r: #ffb21e; } .mythic { --r: #ff3b5c; }
 
-  /* tab rail */
-  .rail { position: absolute; left: 28px; top: 168px; width: 200px; display: flex; flex-direction: column; gap: 14px; z-index: 2; }
-  .tab { position: relative; height: 58px; display: flex; align-items: center; gap: 12px; padding: 0 16px; border-radius: 12px; font-size: 18px;
-    background: rgba(255,255,255,.04); box-shadow: inset 0 0 0 2px rgba(177,76,255,.35); }
-  .tab img { width: 30px; height: 30px; object-fit: contain; }
-  .tab.sel { background: linear-gradient(90deg, rgba(255,79,216,.35), rgba(177,76,255,.15)); box-shadow: inset 0 0 0 2px #ff4fd8, 0 0 22px rgba(255,79,216,.75); }
-
-  /* hero offer */
-  .hero { left: 252px; top: 168px; width: 860px; height: 188px; --s1: #ffcf4f; --s2: #ff4fd8; }
-  .hero .art { position: absolute; left: 26px; top: -30px; width: 210px; filter: drop-shadow(0 0 20px rgba(255,207,79,.7)); }
-  .hero h2 { position: absolute; left: 260px; top: 14px; max-width: 320px; margin: 0; font-size: 30px; line-height: 1.12; font-style: italic; font-weight: 900; }
-  .hero .sub { position: absolute; left: 262px; top: 96px; max-width: 320px; font-size: 16px; color: #d9c8ff; }
-  .hero .timer { position: absolute; left: 262px; top: 140px; font-size: 18px; color: #ffcf4f; }
-  .old { text-decoration: line-through; color: #a796c9; margin-right: 10px; }
-
-  /* crystalline primary button: angular cut + gradient + glow + facets */
-  .cta { position: absolute; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 26px; font-weight: 900; font-style: italic;
-    clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); background: linear-gradient(180deg, #7dffb0, #13c46a); color: #fff;
-    box-shadow: 0 0 26px rgba(19,196,106,.85); }
-  .cta::before { content: ''; position: absolute; inset: 0; clip-path: inherit; background: linear-gradient(115deg, rgba(255,255,255,.55) 0 18%, transparent 18% 60%, rgba(255,255,255,.25) 60% 64%, transparent 64%); }
-  .cta > * { position: relative; } .cta img { width: 32px; height: 32px; }
-  .hero .cta { right: 34px; top: 58px; width: 230px; height: 72px; }
-
-  /* 4-column grid of item cards */
-  .grid { position: absolute; left: 252px; top: 384px; width: 860px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; z-index: 2; }
-  .item { position: relative !important; height: 250px; display: flex; flex-direction: column; align-items: center; padding: 14px 14px 16px; }
-  .item h3 { margin: 0; font-size: 20px; font-style: italic; font-weight: 900; }
-  .item .icon { width: 100px; height: 100px; object-fit: contain; margin: 10px 0 auto; filter: drop-shadow(0 0 14px var(--s1)); }
-  .item .cta { position: relative; width: 100%; height: 54px; font-size: 22px; }
-  .item .owned { position: relative; width: 100%; height: 54px; display: grid; place-items: center; font-size: 20px; color: #9e93b8;
-    clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); background: #241c36; }
-  .rt { position: absolute; top: -12px; left: 12px; padding: 2px 10px; font-size: 12px; border-radius: 6px; background: #0f0918; box-shadow: inset 0 0 0 2px var(--s1), 0 0 12px var(--s1); }
-  .leg { --s1: #ffcf4f; --s2: #ff8a00; } .epc { --s1: #c06bff; --s2: #6b3bff; } .myth { --s1: #ff4f6a; --s2: #ff2fa0; } .rar { --s1: #4fd3ff; --s2: #3b6bff; }
-
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 22px rgba(19,196,106,.7) } 50% { box-shadow: 0 0 38px rgba(19,196,106,1) } }
-  .hero .cta { animation: pulse 1.6s ease-in-out infinite; }
-
-  .legend { width: 320px; background: #1b1530; border-radius: 16px; padding: 18px 20px; font-family: system-ui, sans-serif; font-weight: 400; }
-  .legend h4 { margin: 0 0 10px; font: 900 18px 'Montserrat', sans-serif; }
-  .legend li { margin: 6px 0; color: #ffb8f2; font-size: 14px; } .legend .ok { color: #9dffb0; }
+  .legend { width: 300px; background: #11141b; border: 1px solid #2a2f3b; border-radius: 12px; padding: 16px 18px; font-family: system-ui, sans-serif; font-weight: 400; }
+  .legend h4 { margin: 0 0 8px; font: 800 16px 'Montserrat', sans-serif; }
+  .legend li { margin: 5px 0; color: #c9cfdb; font-size: 13px; }
 </style>
 </head>
 <body>
 <div class="page">
   <div class="artboard" id="artboard">
     <div class="win" data-origin>
-      <div class="neon panel" data-piece="panel" data-margin="40"></div>
-      <div class="header" data-piece="header" data-margin="40"></div>
-      <div class="htitle inv" data-text="Lbl_Title">SHOP</div>
-      <div class="search" data-piece="search"><span data-text="Box_Search">Search...</span></div>
-      <div class="cur t" data-piece="cur_gem" style="left:930px"><img src="assets/icons/blue_gem.png" alt=""><span data-text="Lbl_Gems">12.5K</span></div>
-      <div class="close t" data-piece="close" data-margin="24">✕</div>
+      <div class="panel" data-piece="panel"></div>
+      <div class="tab-title" data-piece="title_tab"><span class="it" data-bind="text.title_shop" data-ph="TITLE"></span></div>
+      <div class="cur" data-piece="cur"><img data-bind="currencies.gems.icon" alt=""><span data-bind="currencies.gems.amount" data-format="abbrev" data-ph="GEMS"></span></div>
+      <div class="close" data-piece="close">✕</div>
 
-      <div class="rail">
-        <div class="tab sel t" data-piece="tab_sel" data-margin="30"><img src="assets/icons/star.png" alt="">Featured</div>
-        <div class="tab t" data-piece="tab"><img src="assets/icons/sword.png" alt="">Units</div>
-        <div class="tab t" data-piece="tab"><img src="assets/icons/potion.png" alt="">Boosts</div>
-        <div class="tab t" data-piece="tab"><img src="assets/icons/robux.png" alt="">Robux</div>
+      <div class="nav">
+        <div class="i sel" data-piece="nav_sel"><img src="assets/icons/star.png" alt=""><span data-bind="text.tab_featured" data-ph="FEATURED"></span></div>
+        <div class="i" data-piece="nav"><img src="assets/icons/sword.png" alt=""><span data-bind="text.tab_units" data-ph="TAB"></span></div>
+        <div class="i"><img src="assets/icons/potion.png" alt=""><span data-bind="text.tab_boosts" data-ph="TAB"></span></div>
+        <div class="i"><img src="assets/icons/robux.png" alt=""><span data-bind="text.tab_robux" data-ph="TAB"></span></div>
       </div>
 
-      <div class="neon hero" data-piece="hero" data-margin="40">
-        <img class="art" src="assets/icons/unit_hero.png" alt="">
-        <h2 class="t">LIMITED: Shadow Monarch</h2>
-        <div class="sub">Mythic unit + 3 trait rerolls + 500 gems</div>
-        <div class="timer t" data-text="Lbl_Timer">Ends in 1d 4h</div>
-        <div class="cta t" data-piece="cta" data-margin="30"><span class="old">1,499</span><img src="assets/icons/robux.png" alt=""><span data-text="Lbl_Price">499</span></div>
+      <div class="hero" data-piece="hero">
+        <img class="art" data-bind="shop.0.icon" alt="">
+        <div class="tag" data-bind="shop.0.badge" data-ph="BADGE"></div>
+        <h2 class="it" data-bind="shop.0.name" data-ph="FEATURED ITEM"></h2>
+        <div class="desc" data-bind="shop.0.description" data-ph="DESCRIPTION"></div>
+        <div class="timer"><img src="assets/icons/clock.png" alt=""><b data-bind="shop.0.ends_in_seconds" data-format="time" data-ph="TIME LEFT"></b></div>
+        <div class="old" data-bind="shop.0.old_price" data-format="commas" data-ph="OLD PRICE"></div>
+        <div class="buy it" data-piece="buy"><img src="assets/icons/robux.png" alt=""><span data-bind="shop.0.price" data-format="commas" data-ph="PRICE"></span></div>
       </div>
 
       <div class="grid">
-        <div class="neon item leg" data-piece="item_leg" data-margin="34"><span class="rt t">♛ LEGENDARY</span><h3 class="t">x2 Luck</h3><img class="icon" src="assets/icons/clover.png" alt=""><div class="cta t" data-piece="cta_small" data-margin="30"><img src="assets/icons/robux.png" alt="">199</div></div>
-        <div class="neon item epc" data-piece="item_epic" data-margin="34"><span class="rt t">★ EPIC</span><h3 class="t">Auto Summon</h3><img class="icon" src="assets/icons/auto.png" alt=""><div class="owned t" data-piece="owned">OWNED ✓</div></div>
-        <div class="neon item myth" data-piece="item_myth" data-margin="34"><span class="rt t">✦ MYTHIC</span><h3 class="t">VIP</h3><img class="icon" src="assets/icons/vip.png" alt=""><div class="cta t" data-piece="cta_small"><img src="assets/icons/robux.png" alt="">99</div></div>
-        <div class="neon item rar" data-piece="item_rare" data-margin="34"><span class="rt t">◆ RARE</span><h3 class="t">500 Gems</h3><img class="icon" src="assets/icons/blue_gem.png" alt=""><div class="cta t" data-piece="cta_small"><img src="assets/icons/robux.png" alt="">49</div></div>
+        <div class="card" data-repeat="shop" data-where="section=passes" data-count="4" data-class="rarity" data-piece="card">
+          <span class="bdg" data-field="badge" data-if="badge"></span>
+          <img class="ic" data-src="icon" alt="">
+          <div class="nm" data-field="name" data-ph="ITEM NAME"></div>
+          <div class="pr"><img src="assets/icons/robux.png" alt=""><span data-field="price" data-format="commas" data-ph="PRICE"></span></div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="legend">
-    <h4>FX map → UIEffects.lua</h4>
+    <h4>Notes</h4>
     <ul>
-      <li>Hero BUY → Glow (green) + Shine</li>
-      <li>Selected tab → Glow (pink)</li>
-      <li>Mythic / Legendary cards → Sparkles</li>
-      <li>Every button → Bounce + ui_click</li>
-      <li>Timer → UIKit.time, gems → UIKit.abbrev</li>
-    </ul>
-    <h4 style="margin-top:16px">Checks</h4>
-    <ul>
-      <li class="ok">Glow margin 30–40px baked into each PNG</li>
-      <li class="ok">Rarity tags show a symbol + word</li>
-      <li class="ok">4 columns (shop), real timer only</li>
-      <li class="ok">Price TextLabels match the server table</li>
+      <li>Hero = first row of shop.csv; grid = rows with section "passes" (4 slots, empty = text holders).</li>
+      <li>One accent colour (--accent). Rarity shows as the top strip + glow from the bottom.</li>
+      <li>FX: only the hero BUY gets Glow + Shine. Everything else: Bounce + ui_click.</li>
     </ul>
   </div>
 </div>
+<script src="content.js"></script>
 <script src="export.js"></script>
 </body>
 </html>

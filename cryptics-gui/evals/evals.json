@@ -29,11 +29,11 @@
     {
       "id": 3,
       "prompt": "/cryptics-gui inventory — anime glow, lots of pets with long names like 'The Ultimate Executioner'",
-      "expected_output": "An Anime Glow inventory with a 5-column grid, long names fitting, rarity shown by colour and symbol.",
+      "expected_output": "An Anime Glow inventory with a 5-column grid, long names fitting, rarity shown by colour and the rarity word.",
       "expectations": [
         "The inventory grid uses 5 columns, not 6",
         "The long name 'The Ultimate Executioner' fits without touching the icon",
-        "Every rarity tag shows a label or symbol, not only a colour",
+        "Every rarity card shows the rarity word, not only a colour, and no unicode symbols are used",
         "Numbers are abbreviated (e.g. 1.25M) via UIKit.abbrev in the Roblox controller",
         "The grid in Roblox is built from data with UIKit.grid"
       ]
@@ -88,6 +88,30 @@
       "expectations": [
         "Claude does not remove or reword 'Skill Made By : Crypticplay_RBLX - Only on Youtube'",
         "The reply explains the license requires the credit line"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "make an inventory for my pet game, here are my pets: (none given)",
+      "expected_output": "Claude asks for the real pet data or sets up pets.csv; the board shows text holders, no invented pets.",
+      "expectations": [
+        "No pet name, power, rarity or price is invented",
+        "pets.csv is set up (or the user's data is converted) and tools/build_content.py is run",
+        "Empty values are visible text holders like PET NAME / POWER",
+        "Claude asks the user for the real rows"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "/cryptics-gui shop — make it look like a real front-page simulator, not AI",
+      "expected_output": "References collected and broken down first, grey-box layout approved, then styled; passes the AI-slop check.",
+      "expectations": [
+        "At least one real reference is found or asked for before designing, with a written breakdown",
+        "A grey-box wireframe is shown before styling",
+        "The layout has one clearly bigger hero element (not a uniform grid)",
+        "Effects/glow are used on at most one element",
+        "No unicode symbols are used as decoration",
+        "The result is compared side by side with the reference before it's shown"
       ]
     }
   ]

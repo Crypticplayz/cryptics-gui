@@ -31,7 +31,7 @@ grid.setItems(playerPets)   -- call again whenever the inventory changes
 - Numbers always go through `UI.abbrev` (1.23K, 4.5M, 1.2B…) or `UI.commas` (12,500); timers through `UI.time` (9:59, 1:02:03, 2d 4h). Size the TextLabel for the longest formatted string (e.g. "999.9Qa"), not today's balance.
 
 ## Accessibility
-- **Rarity is never colour only.** Every rarity card/tag also shows its label or symbol (`UIKit.Rarity[r].label` / `.symbol`) so colour-blind players can tell Rare from Epic.
+- **Rarity is never colour only.** Every rarity card/tag also shows the rarity word (`UIKit.Rarity[r].label`) so colour-blind players can tell Rare from Epic.
 - **Contrast:** coloured text always has the black outline; never light text on a light card.
 - **Text:** ≥ 14 px on a phone (the audit checks it). Leave ~30% spare width in every text box for translations (German, Portuguese and Russian run long). Keep text in TextLabels so Roblox's automatic translation can reach it.
 - **Motion:** `UIKit.Settings.reduceMotion` follows the player's Roblox "Reduce Motion" setting: no open tweens, no blur, no Bounce, no flashes or shake. Effects that carry meaning (a badge appearing) still show, just without the wiggle.

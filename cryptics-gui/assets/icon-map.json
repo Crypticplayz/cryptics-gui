@@ -1,0 +1,210 @@
+{
+ "_note": "Skill Made By : Crypticplay_RBLX - Only on Youtube. Short icon names used by the templates -> [folder, file] inside gvesster's Free Icon Pack (https://gvesster.itch.io/free-icon-pack). tools/icons_from_pack.py copies them out of the user's own download. The pack is NOT included in this skill.",
+ "pack": "gvesster Free Icon Pack v3.1 (Basic)",
+ "icons": {
+  "coin": [
+   "Coin",
+   "Golden Coin 1st 256px.png"
+  ],
+  "gem": [
+   "Diamond",
+   "Blue Diamond 1st 256px.png"
+  ],
+  "robux": [
+   "Robux",
+   "Green Robux 1st 256px.png"
+  ],
+  "cash": [
+   "Cash",
+   "Green Cash 1st 256px.png"
+  ],
+  "ticket": [
+   "Ticket",
+   "Golden Ticket 1st 256px.png"
+  ],
+  "cart": [
+   "Shopping Cart",
+   "Golden Shopping Cart 1st 256px.png"
+  ],
+  "bag": [
+   "Shopping Bag",
+   "Red Shopping Bag 1st 256px.png"
+  ],
+  "paw": [
+   "Paw",
+   "Paw 1st 256px.png"
+  ],
+  "book": [
+   "Book",
+   "Blue Book 1st 256px.png"
+  ],
+  "rebirth": [
+   "Rebirth and Auto Open",
+   "Rebirth 1st 256px.png"
+  ],
+  "auto": [
+   "Rebirth and Auto Open",
+   "Auto Open 1st 256px.png"
+  ],
+  "gift": [
+   "Gift",
+   "Green Gift 1st 256px.png"
+  ],
+  "settings": [
+   "Settings",
+   "Settings 1 1st 256px.png"
+  ],
+  "clover": [
+   "Clover",
+   "Clover 1st 256px.png"
+  ],
+  "star": [
+   "Star",
+   "Golden Star 1st 256px.png"
+  ],
+  "plus": [
+   "Plus",
+   "Plus 1st 256px.png"
+  ],
+  "close": [
+   "X",
+   "X 1st 256px.png"
+  ],
+  "lock": [
+   "Lock",
+   "Lock 1st 256px.png"
+  ],
+  "trash": [
+   "Trash Can",
+   "Trash Can 1st 256px.png"
+  ],
+  "search": [
+   "Magnifying Glass",
+   "Magnifying Glass 1st 256px.png"
+  ],
+  "backpack": [
+   "Backpack",
+   "Backpack 1st 256px.png"
+  ],
+  "egg": [
+   "Egg",
+   "Egg 1st 256px.png"
+  ],
+  "potion": [
+   "Potion",
+   "Blue Potion 1st 256px.png"
+  ],
+  "sword": [
+   "Sword",
+   "Sword 1st 256px.png"
+  ],
+  "vip": [
+   "VIP",
+   "VIP 1st 256px.png"
+  ],
+  "clock": [
+   "Clock",
+   "Clock 1st 256px.png"
+  ],
+  "trophy": [
+   "Trophy",
+   "Golden Trophy 1st 256px.png"
+  ],
+  "bolt": [
+   "Lighting",
+   "Lighting 1st 256px.png"
+  ],
+  "crown": [
+   "Crown",
+   "Crown 1st 256px.png"
+  ],
+  "check": [
+   "Checkmark",
+   "Checkmark 1st 256px.png"
+  ],
+  "upgrade": [
+   "Upgrade",
+   "Green Upgrade 1st 256px.png"
+  ],
+  "invite": [
+   "Add Player",
+   "Add Player 1st 256px.png"
+  ],
+  "aura": [
+   "Aura",
+   "Aura 1st 256px.png"
+  ],
+  "teleport": [
+   "Teleporter",
+   "Teleporter 1st 256px.png"
+  ],
+  "codes": [
+   "Codes",
+   "Codes 1st 256px.png"
+  ],
+  "trade": [
+   "Trade",
+   "Trade 1st 256px.png"
+  ],
+  "calendar": [
+   "Calendar",
+   "Calendar 1st 256px.png"
+  ],
+  "wheel": [
+   "Wheel",
+   "Wheel 1st 256px.png"
+  ],
+  "fire": [
+   "Fire 2",
+   "Fire 256px.png"
+  ],
+  "shield": [
+   "Shield",
+   "Shield 1st 256px.png"
+  ],
+  "chest": [
+   "Chest",
+   "Chest 1st 256px.png"
+  ],
+  "info": [
+   "Info",
+   "Info 1st 256px.png"
+  ],
+  "pet_cat": [
+   "Cat",
+   "Cat 1st 256px.png"
+  ],
+  "pet_dog": [
+   "Dog",
+   "Dog 1st 256px.png"
+  ],
+  "pet_bunny": [
+   "Bunny",
+   "Bunny 1st 256px.png"
+  ],
+  "pet_cat_gold": [
+   "Cat",
+   "Golden Cat 1st 256px.png"
+  ],
+  "pet_dog_gold": [
+   "Dog",
+   "Golden Dog 1st 256px.png"
+  ],
+  "pet_bunny_gold": [
+   "Bunny",
+   "Golden Bunny 1st 256px.png"
+  ],
+  "stats": [
+   "Stats",
+   "Stats 1st 256px.png"
+  ],
+  "music": [
+   "Music ON",
+   "Music ON 1st 256px.png"
+  ],
+  "rocket": [
+   "Rocket",
+   "Rocket 1st 256px.png"
+  ]
+ }
+}

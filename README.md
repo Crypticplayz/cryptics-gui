@@ -43,6 +43,8 @@ Type **`/cryptics-gui`** for the full guided flow, or just ask Claude something 
 | `/cryptics-gui help` | Show this list of commands |
 | `/cryptics-gui credits` | Show the creator credits and the download list again |
 | `/cryptics-gui styles` | Show the 12-style menu with a short description of each look |
+| `/cryptics-gui refs` | Find real reference UIs and break down what makes them work, before designing |
+| `/cryptics-gui content` | Fill the content sheets (pets, shop, currencies, labels) used by the design and the game |
 | `/cryptics-gui hud` | HUD: currency pills, stat pill, side menu buttons with badges |
 | `/cryptics-gui shop` | Shop window: tabs, item cards, price buttons, hero deal |
 | `/cryptics-gui inventory` | Inventory / pets: grid, rarity cards, Equip Best, Delete Mode |
@@ -65,6 +67,9 @@ Type **`/cryptics-gui`** for the full guided flow, or just ask Claude something 
 | `/cryptics-gui gamepad` | Console / controller support: selection ring, focus, B to close |
 
 ## What's new in v2.2
+- **No more fake values**: pet names, powers, prices and product ids come from simple spreadsheets you fill in (`/cryptics-gui content`). Anything you haven't filled in shows as a labelled text holder, and the game, the design and the purchase server all use the same numbers.
+- **Designs start from real references**: the skill finds real Roblox UIs first (yours, Figma Community, DevForum), lays the screen out in grey boxes, then styles it, and runs an "AI-slop" check before showing anything (`/cryptics-gui refs`).
+- **Icons from your icon pack**: one command copies the right icons out of gvesster's Free Icon Pack download.
 - **AuditUI**: one command checks an assembled UI in Studio against every rule and lists what to fix.
 - **UIKit**: assembles your exported PNGs the same way every time: windows that open/close, tabs, buttons with bounce + sound, grids built from data (smooth with hundreds of pets), 1.2K / 3.4M number formats, timers, flipbook effects.
 - **Real purchases**: `Purchases.server.lua` handles Robux products, gamepasses (OWNED state) and coin purchases safely on the server.

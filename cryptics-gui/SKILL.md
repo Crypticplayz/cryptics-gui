@@ -1,7 +1,7 @@
 ---
 name: cryptics-gui
 description: Design and build front-page-quality Roblox game GUI (HUD, inventory, shop, egg hatch, index, gamepasses, popups) in Figma or an HTML design board, then imports the PNGs into Roblox Studio and assembles them (it never designs the look with native Studio frames). Use whenever someone wants Roblox UI, GUI, HUD, menus, inventory/shop screens, buttons, frames, a UI kit or UI style for a Roblox game, wants to turn a Figma design into Roblox ScreenGui, or says their game's UI "looks bad / basic". Starts by crediting the creators whose free assets it uses and listing what to download, then asks which style the user wants from a numbered menu of 11 styles (Cartoony, Stud, Anime Glow, Clean Modern, Glass, Pixel, Sci-Fi Neon, Fantasy, Horror, Candy Pastel, Military Metal) plus a Mix / own-reference option, then designs Figma-first with the user's own icons and free assets from ui-resources.com, exports PNGs, then imports and assembles them in Roblox Studio with scale, 9-slice and mobile rules, wires real purchases, UI sounds, gamepad support and data-driven grids, and audits the result automatically.
-argument-hint: "[help | credits | styles | hud | shop | inventory | hatch | index | gamepass | daily | popup | settings | kit | restyle | polish | export | import | effects | audit | wire | purchases | sounds | gamepad]"
+argument-hint: "[help | credits | styles | refs | content | hud | shop | inventory | hatch | index | gamepass | daily | popup | settings | kit | restyle | polish | export | import | effects | audit | wire | purchases | sounds | gamepad]"
 metadata:
   version: "2.2.0"
   author: "Crypticplay_RBLX (YouTube)"
@@ -26,6 +26,8 @@ The text after `/cryptics-gui` picks what to do. Match it loosely (e.g. "pets" o
 | `/cryptics-gui help` | Show this list of commands |
 | `/cryptics-gui credits` | Show the creator credits and the download list again |
 | `/cryptics-gui styles` | Show the 12-style menu with a short description of each look |
+| `/cryptics-gui refs` | Find 3 real reference UIs (yours, Figma Community, DevForum, top games) and break down what makes them work |
+| `/cryptics-gui content` | Set up / fill the content sheets (pets, shop, currencies, boosts, labels) and rebuild them for the board and the game |
 | `/cryptics-gui hud` | HUD: currency pills, stat pill, side menu buttons with badges |
 | `/cryptics-gui shop` | Shop window: tabs, item cards, price buttons, hero deal |
 | `/cryptics-gui inventory` | Inventory / pets: grid, rarity cards, Equip Best, Delete Mode |
@@ -59,6 +61,8 @@ How each command runs:
 - **export:** export PNGs following `references/figma-and-export.md` / `references/html-to-roblox.md` step 1.
 - **import:** do `references/html-to-roblox.md` steps 2–3 (upload + assemble from images only).
 - **effects:** install `assets/UIEffects.lua` and hook the effects from the "fx:" notes (`references/ui-effects.md`).
+- **refs:** `references/reference-first.md` §1 — collect references, write the breakdown, nothing built yet.
+- **content:** `references/content-and-placeholders.md` — copy the sheets, ask the user for the real rows (never fill them yourself), run `tools/build_content.py`, report empty cells.
 - **audit:** install `assets/AuditUI.lua` as `ServerStorage.CrypticsAudit` (execute_luau, Source = file), run `require(game.ServerStorage.CrypticsAudit).report(game.StarterGui)`, show the ERROR/WARN list, fix each one in the design or the assembly, re-run until 0 errors. Also run it at the end of every `import`.
 - **wire:** install `assets/UIKit.lua` + `assets/UIEffects.lua` in ReplicatedStorage and write the controller LocalScript with UIKit (`references/input-and-accessibility.md` for grids and formatting).
 - **purchases:** `references/purchases.md` (ask for every product/pass id; never invent ids).
@@ -71,7 +75,9 @@ How each command runs:
 **Workflow**
 0. **Read `LOCAL.md`** in this folder if it exists (this machine's icon folder, Figma plan, screenshot scale). If it doesn't, copy `LOCAL.template.md` to `LOCAL.md` the first time you learn one of those facts and save it there — never write personal paths into the other files.
 1. **Credits + downloads message first, then ask the style** with the numbered menu (step 1) every time. Never guess the style from one word.
-2. **A reference image beats a style word.** Match the screenshot (layout, colors, mood) and name the look back before building.
+2. **A reference image beats a style word — and every design starts from references.** Match the user's screenshot (layout, colors, mood) and name the look back before building. No screenshot? Find 3 real references first and write the breakdown (`references/reference-first.md`). Never design "from imagination".
+2b. **Grey-box first.** Lay the screen out as plain grey boxes + text holders, get a yes, then apply the style.
+2c. **Never invent content.** Pet names, powers, prices, product ids, timers and amounts come from the content sheets (`references/content-and-placeholders.md`); anything missing is a labelled text holder (`PET NAME`, `PRICE`), never a made-up value. Ask the user for the real data.
 3. **Design in Figma through the Figma MCP** (or the HTML board), export PNGs, then **import them into Roblox Studio and assemble them** (Studio MCP `upload_image` + `execute_luau`). **Never design the look in Studio**: don't build buttons, panels, headers, cards or pills out of native Frames + UICorner + UIStroke + UIGradient. In Studio, ScreenGui / Frames / ImageLabels / ImageButtons are only containers that hold and position the exported images; every visual (faces, black lips, outlines, gradients, studs, glare, glows) comes from the PNGs. The only things added in Studio are TextLabels for changing text and the UIEffects animations. If a piece is missing, export it from Figma/HTML, don't fake it with frames. If the Figma MCP is capped (Starter plan), say so at once, batch work into very few large calls, and offer the fallbacks in `references/figma-and-export.md`.
 4. **Always give the Figma link** to the finished screen.
 5. **Keep improving this skill**: every correction becomes a rule here; then rebuild the zip if you share it.
@@ -94,6 +100,7 @@ How each command runs:
 13d. **Decorations never spill out**: sunbursts, halftones, rays, glare stay inside their card — put them in a clipped decoration layer (HTML: `.decor { position:absolute; inset:0; overflow:hidden; border-radius }`; Figma: clip content on the face frame; Roblox: a Frame with ClipsDescendants + UICorner). Only intentional pop-outs (header icon, badges) may cross an edge.
 14. **Inner spacing inside every button/pill ≥ 12–16px** between content and edges — e.g. the "+" on currency pills must never touch the end; shrink text before it gets closer.
 15. **Before showing**: one screenshot, zoom-check edges, clipping, overlaps, black lips, padding, text fit. Fix first, then show.
+16. **AI-slop check before showing** (`references/reference-first.md` §3): uniform same-size cards, round pastel blobs, glare/glow on everything, small polite icons, unicode symbols, neon-purple "anime", invented values, everything straight and centred. Two or more = redo it. Then compare side by side with the main reference.
 
 ## Start: credits + downloads (say this FIRST, every time the skill starts)
 
@@ -123,7 +130,7 @@ Before the style question, post this message in chat (short, friendly, keep the 
 
 Rules for this step:
 - Show it once at the start of a new session using the skill, not before every screen. The first line is always the creator credit, unchanged.
-- Right after posting the message, download items 2–4 yourself (e.g. `curl -L -o`): studs → this skill's `assets/textures/` as `stud_kek_universal.webp` and `stud_universal.webp`; glow/sparkle → `assets/fx/` as `glow.png` and `sparkle.png`. If the skill folder isn't writable, use `ui-board/assets/tex/` and `ui-board/assets/fx/` in the working dir. Check each file is a real image (PNG/WEBP header) and never run anything from them. Icons from itch.io: the user downloads those (itch.io needs a click-through).
+- Right after posting the message, download items 2–4 yourself (e.g. `curl -L -o`): studs → this skill's `assets/textures/` as `stud_kek_universal.webp` and `stud_universal.webp`; glow/sparkle → `assets/fx/` as `glow.png` and `sparkle.png`. If the skill folder isn't writable, use `ui-board/assets/tex/` and `ui-board/assets/fx/` in the working dir. Check each file is a real image (PNG/WEBP header) and never run anything from them. Icons from itch.io: the user downloads those (itch.io needs a click-through); then run `python tools/icons_from_pack.py "<the zip or folder>" ui-board/assets/icons` to copy the icons the templates use (names in `assets/icon-map.json`).
 - If the files already exist, skip downloading them and say they're already set up.
 - If the user skips it, carry on and use plain fallbacks (UIGradient instead of studs, no glow images).
 
@@ -156,7 +163,7 @@ Recipes: style 1 → `references/style-a-cartoony.md`, style 3 → `references/s
 
 ## 2. Lock the style on ONE screen first
 
-**Plan the layout first with `references/ui-planning-and-spacing.md`** (hero, zones, 8-pt spacing, hierarchy, badges, effects). Every shop/menu also needs its **Open button on the HUD** (menu button with badge + idle animation) — design it together with the screen. Build only the first screen with the exact recipe. Show a screenshot, get approval, then reuse the same components for every other screen. Changing style later means redoing everything.
+**Start from references (`/cryptics-gui refs`) and a grey-box wireframe, then plan the layout with `references/ui-planning-and-spacing.md`** (hero, zones, 8-pt spacing, hierarchy, badges, effects). Every shop/menu also needs its **Open button on the HUD** (menu button with badge + idle animation) — design it together with the screen. Build only the first screen with the exact recipe. Show a screenshot, get approval, then reuse the same components for every other screen. Changing style later means redoing everything.
 
 ## 3. Build the remaining screens
 
@@ -166,7 +173,7 @@ Go through `references/screens-checklist.md`. Build reusable components first (B
 
 **Figma path — DEFAULT for anything that should look like a front-page game** (when the Figma MCP is available): follow `references/figma-and-export.md`. Load `figma:figma-create-new-file` before creating a file and `figma:figma-use` (+ `figma:figma-generate-design`) before any `use_figma` call. Upload the user's icons (upload_assets), pull textures/effects from ui-resources.com when useful (ask before downloading files), build components, Roblox-style layer names, then export PNGs. Then import the PNGs into Studio and assemble them (`references/html-to-roblox.md` steps 2–3 + `references/roblox-studio-build.md`). If the Studio MCP isn't connected, give the user the PNGs and the import steps. Always give the user the Figma link to the screen (`https://www.figma.com/design/<fileKey>?node-id=<id with - instead of :>`).
 
-**HTML board path — use when the Figma MCP cap is hit (it's unlimited)**: copy `assets/templates/cartoony-studded-shop.html` into a `ui-board/` folder in the working dir with an `assets/` folder (the user's icons in `icons/`, `fx/` effects from ui-resources.com, `tex/` stud textures from `assets/textures`). It already has the rules built in as CSS: `.s3d` studded 3D surface (black lip via `box-shadow: 0 7px 0 #000`, black 4px outline, Kek stud texture with `mix-blend-mode: overlay`, glass glare), `.btn` (inner padding 18px, black lip), `.pill` (12px gap before "+"), `.gt` gradient text (wrapper `::before` draws the black outline, inner `<span>` carries the gradient — never put the stroke and the gradient on the same element), scroll area with 16px padding + 22px fade + scrollbar outside, FX legend beside the artboard, CSS animations that preview the UIEffects. Serve it with `.claude/launch.json` → `python -m http.server 5180 --directory ui-board` + `preview_start`, check with a zoomed screenshot, then export pieces/previews with Playwright element screenshots (`browser_take_screenshot` with `target` = selector). Browser pane can't open file:// — always serve over localhost.
+**HTML board path — use when the Figma MCP cap is hit (it's unlimited)**: copy the closest template from `assets/templates/` (cartoony shop, cartoony HUD, cartoony inventory, anime/dark shop) plus `content.js` and `export.js` into a `ui-board/` folder in the working dir, with an `assets/` folder (the user's icons in `icons/`, `fx/` effects from ui-resources.com, `tex/` stud textures from `assets/textures`), a `content/` folder (the sheets from `assets/content/`, built with `python tools/build_content.py ui-board/content ui-board`) and icons from `tools/icons_from_pack.py` or the user's folder. Templates are starting points: restyle them to the references, never ship one unchanged. It already has the rules built in as CSS: `.s3d` studded 3D surface (black lip via `box-shadow: 0 7px 0 #000`, black 4px outline, Kek stud texture with `mix-blend-mode: overlay`, glass glare), `.btn` (inner padding 18px, black lip), `.pill` (12px gap before "+"), `.gt` gradient text (wrapper `::before` draws the black outline, inner `<span>` carries the gradient — never put the stroke and the gradient on the same element), scroll area with 16px padding + 22px fade + scrollbar outside, FX legend beside the artboard, CSS animations that preview the UIEffects. Serve it with `.claude/launch.json` → `python -m http.server 5180 --directory ui-board` + `preview_start`, check with a zoomed screenshot, then export pieces/previews with Playwright element screenshots (`browser_take_screenshot` with `target` = selector). Browser pane can't open file:// — always serve over localhost.
 
 **Roblox Studio = import + assembly only** (when the Roblox Studio MCP is connected, after the design is done in Figma or HTML): upload the exported PNGs, build the ScreenGui from ImageLabels/ImageButtons that show those PNGs, add TextLabels for changing text, install `assets/UIEffects.lua` as `ReplicatedStorage.UIEffects` and hook every button with Bounce plus the effects the "fx:" notes ask for. Follow `references/html-to-roblox.md` and `references/roblox-studio-build.md`. Never design or restyle anything with native Frames/UICorner/UIStroke/UIGradient.
 
@@ -183,8 +190,10 @@ Go through `references/screens-checklist.md`. Build reusable components first (B
 - One primary action per window, brightest/most saturated button = the one you want clicked
 - Hover/press feedback on every button (tween scale) and a click sound (`references/ui-sounds.md`)
 - Buy buttons really buy: server-checked purchases (`references/purchases.md`), never placeholders
+- No invented values: every name, number, price and id comes from the content sheets; gaps are visible text holders
+- Passes the AI-slop check and holds up side by side with its reference
 - Gamepad: every button selectable, focus lands in the open window, B closes it
-- Rarity never colour-only (label or symbol too); Reduce Motion respected (`references/input-and-accessibility.md`)
+- Rarity never colour-only (the rarity word too, no unicode symbols); Reduce Motion respected (`references/input-and-accessibility.md`)
 - `AuditUI` report: 0 errors
 - Close X always top-right
 
@@ -214,3 +223,6 @@ If a step needs a click, sign-in, purchase, download or upload you can't do (Fig
 - `references/input-and-accessibility.md` — gamepad/console, data-driven grids, number formats, colour-blind rarity, reduce motion, translation room
 - `LOCAL.template.md` — copy to `LOCAL.md` for this machine's settings (icon folder, Figma plan, screenshot scale); never shared
 - `evals/` — test prompts with expected results; `tests/` — Studio self-tests for UIKit and AuditUI
+- `references/reference-first.md` — collect references, grey-box wireframe, the AI-slop check, proven patterns from real Roblox UIs
+- `references/content-and-placeholders.md` + `assets/content/*.csv` + `tools/build_content.py` + `assets/templates/content.js` — content sheets → board + `UIContent` module; text holders instead of invented values
+- `assets/icon-map.json` + `tools/icons_from_pack.py` — the icon names the templates use, copied out of the user's own icon pack download

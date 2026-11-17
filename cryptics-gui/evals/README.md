@@ -5,7 +5,7 @@ Skill Made By : Crypticplay_RBLX - Only on Youtube
 Two kinds of tests. Run both after every change to the skill.
 
 ## 1. Skill tests — `evals/evals.json`
-Eight prompts with yes/no expectations (credits first, black lips, 5 vs 4 columns, rule 3, real purchases, audit, the credit line…). Run them with the **skill-creator** skill: ask Claude *"run the evals for cryptics-gui"*. A failing expectation means a rule in SKILL.md is unclear or contradicted somewhere — fix the text, then re-run.
+Ten prompts with yes/no expectations (credits first, black lips, 5 vs 4 columns, rule 3, real purchases, audit, the credit line, no invented content, reference-first + slop check). Run them with the **skill-creator** skill: ask Claude *"run the evals for cryptics-gui"*. A failing expectation means a rule in SKILL.md is unclear or contradicted somewhere — fix the text, then re-run.
 
 ## 2. Studio self-test — `tests/selftest.lua`
 Proves the Luau code works and that the audit can actually fail:

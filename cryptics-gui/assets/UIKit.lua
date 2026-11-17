@@ -33,16 +33,16 @@ UIKit.Theme = {
 	SelectionImage = "",                 -- optional gamepad highlight PNG (exported glow ring)
 }
 
--- Accessibility: rarity is never colour-only. Each rarity has a colour, a short label and a symbol so a
--- colour-blind player can still tell them apart (show the symbol or label on the card/tag).
+-- Accessibility: rarity is never colour-only. Each rarity has a colour AND a word; show the word on the
+-- card/tag so a colour-blind player can still tell them apart. (No unicode symbols: they read as AI-made.)
 UIKit.Rarity = {
-	Common    = { color = Color3.fromRGB(184, 192, 200), label = "COMMON",    symbol = "●" },
-	Uncommon  = { color = Color3.fromRGB(61, 220, 90),   label = "UNCOMMON",  symbol = "▲" },
-	Rare      = { color = Color3.fromRGB(63, 169, 255),  label = "RARE",      symbol = "◆" },
-	Epic      = { color = Color3.fromRGB(164, 92, 255),  label = "EPIC",      symbol = "★" },
-	Legendary = { color = Color3.fromRGB(255, 201, 60),  label = "LEGENDARY", symbol = "♛" },
-	Mythic    = { color = Color3.fromRGB(255, 77, 77),   label = "MYTHIC",    symbol = "✦" },
-	Secret    = { color = Color3.fromRGB(255, 255, 255), label = "SECRET",    symbol = "?" },
+	Common    = { color = Color3.fromRGB(184, 192, 200), label = "COMMON" },
+	Uncommon  = { color = Color3.fromRGB(61, 220, 90),   label = "UNCOMMON" },
+	Rare      = { color = Color3.fromRGB(63, 169, 255),  label = "RARE" },
+	Epic      = { color = Color3.fromRGB(164, 92, 255),  label = "EPIC" },
+	Legendary = { color = Color3.fromRGB(255, 201, 60),  label = "LEGENDARY" },
+	Mythic    = { color = Color3.fromRGB(255, 77, 77),   label = "MYTHIC" },
+	Secret    = { color = Color3.fromRGB(255, 255, 255), label = "SECRET" },
 }
 
 -- Player-facing settings. Defaults follow the player's Roblox accessibility settings when available.
@@ -101,6 +101,39 @@ function UIKit.time(seconds: number): string
 	if d > 0 then return string.format("%dd %dh", d, h) end
 	if h > 0 then return string.format("%d:%02d:%02d", h, m, s) end
 	return string.format("%d:%02d", m, s)
+end
+
+----------------------------------------------------------------------------------------------------
+-- Content (references/content-and-placeholders.md): the game's data from the content sheets,
+-- built into ReplicatedStorage.UIContent by tools/build_content.py. Never invent values in code:
+-- a missing value shows the fallback (or nothing).
+----------------------------------------------------------------------------------------------------
+local contentCache: any = nil
+function UIKit.content(): { [string]: any }
+	if contentCache == nil then
+		contentCache = {}
+		local m = ReplicatedStorage:FindFirstChild("UIContent")
+		if m and m:IsA("ModuleScript") then
+			local ok, data = pcall(require, m)
+			if ok and type(data) == "table" then contentCache = data end
+		end
+	end
+	return contentCache
+end
+
+-- A label from text.csv (e.g. UIKit.text("btn_equip_best")), or the fallback, or "".
+function UIKit.text(key: string, fallback: string?): string
+	local t = UIKit.content().text
+	return (t and t[key]) or fallback or ""
+end
+
+-- Shop rows, optionally filtered by section (e.g. UIKit.shopItems("passes")).
+function UIKit.shopItems(section: string?): { any }
+	local out = {}
+	for _, row in ipairs(UIKit.content().shop or {}) do
+		if section == nil or row.section == section then table.insert(out, row) end
+	end
+	return out
 end
 
 ----------------------------------------------------------------------------------------------------

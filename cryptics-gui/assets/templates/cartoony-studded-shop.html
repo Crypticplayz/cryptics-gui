@@ -124,6 +124,8 @@
   .card .icon { width: 96px; height: 96px; object-fit: contain; margin: 6px 0 auto; filter: drop-shadow(0 4px 0 rgba(0,0,0,.3)); }
   .card .btn { width: 100%; height: 56px; font-size: 26px; }
   .cyan { --c1: #b9f7ff; --c2: #2fc6e8; } .mag { --c1: #ffb8f4; --c2: #d63bdb; } .peach { --c1: #ffe2b8; --c2: #ff9f4a; }
+  /* repeated pass cards cycle through the three card colours */
+  .row .card:nth-child(3n+1) { --c1: #b9f7ff; --c2: #2fc6e8; } .row .card:nth-child(3n+2) { --c1: #ffb8f4; --c2: #d63bdb; } .row .card:nth-child(3n) { --c1: #ffe2b8; --c2: #ff9f4a; }
   .tag { position: absolute; top: -14px; right: -8px; padding: 2px 10px 4px; border: 3px solid #000; border-radius: 10px; font-size: 15px;
     background: linear-gradient(180deg,#ff8a8a,#e81e1e); transform: rotate(6deg); box-shadow: 0 3px 0 #000; z-index: 2; }
   .check { position: absolute; top: 56px; right: 18px; width: 50px; z-index: 2; }
@@ -157,75 +159,64 @@
 <body>
 <div class="page">
   <div class="artboard" id="artboard">
-    <div class="win">
+    <div class="win" data-origin>
       <!-- BODY -->
-      <div class="s3d body"></div>
+      <div class="s3d body" data-piece="body"></div>
       <div class="track"></div><div class="thumb"></div>
 
       <!-- HEADER SLAB -->
-      <div class="s3d header"></div>
+      <div class="s3d header" data-piece="header"></div>
       <img class="cart" src="assets/icons/cart.png" alt="">
-      <div class="title gt" data-t="Shop"><span>Shop</span></div>
-      <div class="pill" style="left:560px; top:24px; z-index:4"><img class="ico" src="assets/icons/coin.png" alt=""><span class="amt t" style="color:#ffd04a">12,500</span><img class="plus" src="assets/icons/plus.png" alt=""></div>
-      <div class="pill" style="left:808px; top:24px; z-index:4"><img class="ico" src="assets/icons/blue_gem.png" alt=""><span class="amt t" style="color:#7fdcff;min-width:60px">250</span><img class="plus" src="assets/icons/plus.png" alt=""></div>
-      <div class="btn red close t">X</div>
+      <div class="title gt" data-t="TITLE" data-bind="text.title_shop" data-ph="TITLE"><span>TITLE</span></div>
+      <div class="pill" data-piece="pill" style="left:560px; top:24px; z-index:4"><img class="ico" src="assets/icons/coin.png" alt=""><span class="amt t" style="color:#ffd04a" data-bind="currencies.coins.amount" data-format="abbrev" data-ph="COINS"></span><img class="plus" src="assets/icons/plus.png" alt=""></div>
+      <div class="pill" style="left:808px; top:24px; z-index:4"><img class="ico" src="assets/icons/gem.png" alt=""><span class="amt t" style="color:#7fdcff;min-width:60px" data-bind="currencies.gems.amount" data-format="abbrev" data-ph="GEMS"></span><img class="plus" src="assets/icons/plus.png" alt=""></div>
+      <div class="btn red close t" data-piece="close">X</div>
 
       <!-- LEFT RAIL -->
       <div class="rail">
-        <div class="btn gold sel t"><img src="assets/icons/star.png" alt="">Featured</div>
-        <div class="btn navy t"><img src="assets/icons/upgrade.png" alt="">Shovels</div>
-        <div class="btn navy t"><img src="assets/icons/fuse.png" alt="">Potions</div>
-        <div class="btn navy t"><img src="assets/icons/bolt.png" alt="">Pads</div>
-        <div class="btn green t"><img src="assets/icons/robux.png" alt="">Robux</div>
+        <div class="btn gold sel t" data-piece="tab_gold" data-margin="40"><img src="assets/icons/star.png" alt=""><span data-bind="text.tab_featured" data-ph="TAB"></span></div>
+        <div class="btn navy t" data-piece="tab_navy"><img src="assets/icons/upgrade.png" alt=""><span data-bind="text.tab_1" data-ph="TAB"></span></div>
+        <div class="btn navy t"><img src="assets/icons/potion.png" alt=""><span data-bind="text.tab_boosts" data-ph="TAB"></span></div>
+        <div class="btn navy t"><img src="assets/icons/bolt.png" alt=""><span data-bind="text.tab_2" data-ph="TAB"></span></div>
+        <div class="btn green t" data-piece="tab_green"><img src="assets/icons/robux.png" alt=""><span data-bind="text.tab_robux" data-ph="TAB"></span></div>
       </div>
-      <div class="s3d free noglare">
+      <div class="s3d free noglare" data-piece="free">
         <div class="decor"><img class="rays" src="assets/fx/sunburst_quelly6.png" alt=""></div>
         <img class="gift" src="assets/icons/gift.png" alt="">
-        <div class="lbl t">FREE DAILY</div>
-        <div class="badge-n t">1</div>
+        <div class="lbl t" data-bind="text.offer_free_gift" data-ph="FREE OFFER"></div>
+        <div class="badge-n t" data-piece="badge" data-margin="8">1</div>
       </div>
 
       <!-- CONTENT -->
       <div class="scroll">
         <div class="stack">
-          <div class="s3d starter">
+          <div class="s3d starter" data-piece="starter" data-keep=".starter .decor,.starter .ht">
             <div class="decor"><img class="sun" src="assets/fx/sunburst_quelly6.png" alt=""><img class="ht" src="assets/fx/halftone_quelly1.png" alt=""></div>
             <div class="left">
-              <h2 class="t">Starter Pack</h2>
-              <div class="sub">A boost for your first jumps!</div>
+              <h2 class="t" data-bind="shop.0.name" data-ph="FEATURED ITEM"></h2>
+              <div class="sub" data-bind="shop.0.description" data-ph="DESCRIPTION"></div>
               <div class="tiles">
-                <div class="tile"><img src="assets/icons/cash.png" alt=""><span class="t">+5K</span></div>
+                <div class="tile" data-piece="tile"><img src="assets/icons/cash.png" alt=""><span class="t" data-ph="?"></span></div>
                 <img class="plusimg" src="assets/icons/plus.png" alt="">
-                <div class="tile"><img src="assets/icons/blue_gem.png" alt=""><span class="t">+50</span></div>
+                <div class="tile"><img src="assets/icons/gem.png" alt=""><span class="t" data-ph="?"></span></div>
                 <img class="plusimg" src="assets/icons/plus.png" alt="">
-                <div class="tile"><img src="assets/icons/fuse.png" alt=""><span class="t">x1</span></div>
+                <div class="tile"><img src="assets/icons/potion.png" alt=""><span class="t" data-ph="?"></span></div>
               </div>
             </div>
             <div class="right">
-              <div class="op gt" data-t="OP VALUE!"><span>OP VALUE!</span></div>
-              <div class="btn green buy t shine"><span class="sweep"></span><img src="assets/icons/robux.png" alt="">49</div>
+              <div class="op gt" data-t="BADGE" data-bind="shop.0.badge" data-ph="BADGE"><span>BADGE</span></div>
+              <div class="btn green buy t shine" data-piece="buy_big"><span class="sweep"></span><img src="assets/icons/robux.png" alt=""><span data-bind="shop.0.price" data-format="commas" data-ph="PRICE"></span></div>
             </div>
             <img class="spark" src="assets/fx/star10.png" style="right:18px; top:6px" alt="">
             <img class="spark" src="assets/fx/star10.png" style="right:258px; top:120px; width:26px; animation-delay:.6s" alt="">
           </div>
 
           <div class="row">
-            <div class="s3d card cyan">
-              <div class="tag t">POPULAR</div>
-              <h3 class="t">x2 Luck</h3>
-              <img class="icon" src="assets/icons/clover.png" alt="">
-              <div class="btn green t"><img src="assets/icons/robux.png" alt="">199</div>
-            </div>
-            <div class="s3d card mag">
-              <h3 class="t">Auto Hatch</h3>
-              <svg class="check" viewBox="0 0 54 54"><path d="M8 28 L22 42 L46 12" stroke="#000" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 28 L22 42 L46 12" stroke="#4BE36A" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <img class="icon" src="assets/icons/auto.png" alt="">
-              <div class="btn gray t">OWNED</div>
-            </div>
-            <div class="s3d card peach">
-              <h3 class="t">VIP</h3>
-              <img class="icon" src="assets/icons/vip.png" alt="">
-              <div class="btn green t"><img src="assets/icons/robux.png" alt="">99</div>
+            <div class="s3d card" data-piece="card" data-repeat="shop" data-where="section=passes" data-count="3">
+              <div class="tag t" data-piece="tag" data-margin="12" data-field="badge" data-if="badge"></div>
+              <h3 class="t" data-field="name" data-ph="ITEM NAME"></h3>
+              <img class="icon" data-src="icon" alt="">
+              <div class="btn green t"><img src="assets/icons/robux.png" alt=""><span data-field="price" data-format="commas" data-ph="PRICE"></span></div>
             </div>
           </div>
         </div>
@@ -258,5 +249,7 @@
     </ul>
   </div>
 </div>
+<script src="content.js"></script>
+<script src="export.js"></script>
 </body>
 </html>

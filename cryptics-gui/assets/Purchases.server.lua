@@ -64,6 +64,53 @@ function Economy.add(player: Player, currency: string, amount: number): boolean
 end
 
 ------------------------------------------------------------------------------------------------
+-- 3) PRICES AND IDS FROM THE CONTENT SHEETS (ReplicatedStorage.UIContent, built from shop.csv)
+-- So the price on a button is always the price the server charges. Rows fill in what you didn't
+-- write by hand above. `gives` = "<currencyId>:<amount>" (e.g. "coins:5000") is granted automatically;
+-- anything else needs a function in GRANTS / PASS_PERKS keyed by the row id.
+------------------------------------------------------------------------------------------------
+local GRANTS: { [string]: (Player) -> boolean } = {
+	-- ["starter"] = function(player) ... return true end,
+}
+local PASS_PERKS: { [string]: (Player) -> () } = {
+	-- ["vip"] = function(player) player:SetAttribute("CoinMultiplier", 1.5) end,
+}
+
+local function grantFromGives(gives: string?): ((Player) -> boolean)?
+	if type(gives) ~= "string" then return nil end
+	local cur, amount = string.match(gives, "^%s*([%w_]+)%s*:%s*(%d+)%s*$")
+	if not cur then return nil end
+	local n = tonumber(amount) :: number
+	return function(player: Player) return Economy.add(player, cur, n) end
+end
+
+do
+	local mod = ReplicatedStorage:FindFirstChild("UIContent")
+	local ok, content = false, nil
+	if mod and mod:IsA("ModuleScript") then ok, content = pcall(require, mod) end
+	if ok and type(content) == "table" then
+		for _, row in ipairs(content.shop or {}) do
+			local grant = GRANTS[row.id] or grantFromGives(row.gives)
+			local cur = row.currency and string.lower(row.currency) or nil
+			if cur == "robux" then
+				if row.product_id and not PRODUCTS[row.product_id] then
+					if grant then PRODUCTS[row.product_id] = grant
+					else warn("Purchases: shop row '" .. tostring(row.id) .. "' has no grant (add GRANTS['" .. tostring(row.id) .. "'] or a gives value)") end
+				elseif row.pass_id and not PASSES[row.pass_id] then
+					PASSES[row.pass_id] = PASS_PERKS[row.id] or function() end
+				end
+			elseif cur and row.price and not SHOP_ITEMS[row.id] then
+				if grant then
+					SHOP_ITEMS[row.id] = { currency = row.currency, price = row.price, grant = grant }
+				else
+					warn("Purchases: shop row '" .. tostring(row.id) .. "' has no grant (add GRANTS['" .. tostring(row.id) .. "'] or a gives value)")
+				end
+			end
+		end
+	end
+end
+
+------------------------------------------------------------------------------------------------
 -- Developer products: grant once per PurchaseId
 ------------------------------------------------------------------------------------------------
 local history = DataStoreService:GetDataStore("CrypticsPurchaseHistory")

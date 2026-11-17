@@ -1,0 +1,32 @@
+key,text
+title_shop,Shop
+title_pets,Pets
+title_index,Index
+title_daily,Daily
+title_settings,Settings
+title_rebirth,Rebirth
+btn_close,X
+btn_buy,Buy
+btn_owned,Owned
+btn_equip,Equip
+btn_equip_best,Equip Best
+btn_delete_mode,Delete Mode
+btn_filter,Filter
+btn_claim,Claim
+search_hint,Search...
+tab_featured,Featured
+tab_units,Units
+tab_boosts,Boosts
+tab_robux,Robux
+tab_1,
+tab_2,
+label_equipped,Equipped
+label_capacity,Storage
+hud_shop,Shop
+hud_pets,Pets
+hud_index,Index
+hud_rebirth,Rebirth
+hud_daily,Daily
+hud_settings,Settings
+offer_free_gift,Free Gift
+offer_invite,Invite Friends
